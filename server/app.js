@@ -15,11 +15,14 @@ app.use(cookieParser());
 //   apiController.getWikiData,
 //   (req, res) => res.status(200).json(res.locals.wikiData));
 
-app.get('/home', userController.authorize, (req, res) => res.status(200));
-
 app.get('/verify', 
   userController.authenticate, 
   (req, res) => res.status(200).redirect('/home'));
+
+app.get('/home', 
+  userController.authorize,
+  (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
+
 
 app.use(
   '/',

@@ -1,28 +1,11 @@
-const {client_id, client_secret} = require('../secrets.js');
+const {client_id, client_secret} = require('../secrets/secrets.js');
 
 const redirect_uri = 'http://localhost:3000/home';
 
 const userController = {};
 
-userController.authorize = (req, res, next) => {
-  
-}
-
-userController.authenticate = (req, res, next) => {
-  // //define scopes
-  const scopes = 'user-read-private user-read-email';
-  // redirect to spotify page presenting scope
-  res.redirect('https://accounts.spotify.com/authorize' +
-    '?response_type=code' +
-    '&client_id=' + client_id +
-    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
-    '&redirect_uri=' + encodeURIComponent(redirect_uri));
-    //**add state */
-    //need client id, scopes, redirect uri, (preferrably) state
-    //user is asked to accept or deny and then is sent back to redirect uri
-      //if accepted, response query string contains authorization code and value of state
-      //if denied, query string contains error and value of state
-      console.log(res.query)
+userController.authorize   = (req, res, next) => {
+  console.log(req.query.code)
   //AFTER AUTH CODE HAS BEEN RECEIVED:
   //make a post request to https://accounts.spotify.com/api/token
     //body must contain following parameters encoded in application/x-www-form-urlencoded:
@@ -44,6 +27,24 @@ userController.authenticate = (req, res, next) => {
       //body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
     //header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
 
+  return next();
+}
+
+userController.authenticate = (req, res, next) => {
+  // //define scopes
+  const scopes = 'user-read-private user-read-email';
+  // redirect to spotify page presenting scope
+  res.redirect('https://accounts.spotify.com/authorize' +
+    '?response_type=code' +
+    '&client_id=' + client_id +
+    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+    '&redirect_uri=' + encodeURIComponent(redirect_uri));
+    //**add state */
+    //need client id, scopes, redirect uri, (preferrably) state
+    //user is asked to accept or deny and then is sent back to redirect uri
+      //if accepted, response query string contains authorization code and value of state
+      //if denied, query string contains error and value of state
+  
     // return next();
 }
 
