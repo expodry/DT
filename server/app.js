@@ -13,6 +13,7 @@ app.use(cookieParser());
 
 app.get('/api',
   apiController.getCountryData,
+  apiController.getWeatherData,
   (req, res) => res.status(200).send(res.locals.data));
 
 app.get('/verify',
