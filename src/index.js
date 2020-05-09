@@ -1,4 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './components/containers/App.js';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(<h1>buhbye, world!</h1>, document.getElementById('root'));
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('root'),
+);
