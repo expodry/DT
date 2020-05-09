@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const apiController = require('./controllers/apiController');
+// const userController = require('./controllers/userController');
 
 const app = express();
 const port = 3000;
@@ -10,9 +11,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// app.get('/api',
-//   apiController.getWikiData,
-//   (req, res) => res.status(200).json(res.locals.wikiData));
+app.get('/api',
+  apiController.getCountryData,
+  (req, res) => res.status(200).send(res.locals.countryData));
+
+app.get('/verify',
+  // userController.authorize,
+  (req, res) => res.status(200));
 
 app.use(
   '/',
@@ -23,7 +28,6 @@ app.use(
 
 // catch-all route handler for any requests to an unknown route
 app.all('*', (req, res) => {
-  console.log(__dirname);
   res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
 });
 
