@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 app.get('/api',
   apiController.getCountryData,
-  (req, res) => res.status(200).send(res.locals.countryData));
+  (req, res) => res.status(200).send(res.locals.data));
 
 app.get('/verify',
   // userController.authorize,
