@@ -1,7 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const apiController = require('./controllers/apiController');
+// const apiController = require('./controllers/apiController');
+const userController = require('./controllers/userController');
 
 const app = express();
 const port = 3000;
@@ -13,6 +14,12 @@ app.use(cookieParser());
 // app.get('/api',
 //   apiController.getWikiData,
 //   (req, res) => res.status(200).json(res.locals.wikiData));
+
+app.get('/home', userController.authorize, (req, res) => res.status(200));
+
+app.get('/verify', 
+  userController.authenticate, 
+  (req, res) => res.status(200).redirect('/home'));
 
 app.use(
   '/',
