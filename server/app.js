@@ -13,15 +13,15 @@ app.use(cookieParser());
 
 app.get('/verify', 
   userController.authenticate, 
-  (req, res) => res.status(200).redirect('/home'));
+  (req, res) => res.status(200).redirect('/authorize'));
 
 app.get('/authorize',
   userController.authorize,
-  (req, res) => res.status(200).sendFile(path.reso)
-)
+  (req, res) => res.redirect('/home'));
+
 
 app.get('/home', 
-  userController.authorize,
+  // userController.authorize,
   // userController.getUserData,
   (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
 
