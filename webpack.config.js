@@ -40,6 +40,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     proxy: {
       '/verify': 'http://localhost:3000/',
+      '/api': 'http://localhost:3000/',
       '/': 'http://localhost:3000/',
     },
   },

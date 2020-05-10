@@ -21,8 +21,6 @@ app.get('/authorize',
 
 
 app.get('/home', 
-  // userController.authorize,
-  // userController.getUserData,
   (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
 
 app.get('/api/:city&:country',

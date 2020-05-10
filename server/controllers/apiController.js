@@ -6,7 +6,7 @@ apiController.getCountryData = (req, res, next) => {
   const { country } = req.params;
   const url = `https://restcountries.eu/rest/v2/name/${country}`;
 
-  fetch(url)
+  fetch(url) 
     .then((response) => response.json())
     .then((data) => {
       // destructure from array
@@ -30,6 +30,7 @@ apiController.getCountryData = (req, res, next) => {
       };
 
       res.locals.data = { countryData };
+      // console.log(res.locals.data);
       return next();
     })
     .catch((err) => next(`Error in getCountryData${err}`));
@@ -43,7 +44,6 @@ apiController.getWeatherData = (req, res, next) => {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
 
       const weatherData = {
         weather: data.weather[0].main,
@@ -58,6 +58,7 @@ apiController.getWeatherData = (req, res, next) => {
       };
 
       res.locals.data.weatherData = weatherData;
+      console.log(res.locals);
       return next();
     })
     .catch((err) => {
