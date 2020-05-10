@@ -1,0 +1,13 @@
+#main {
+  display: flex;
+  justify-content: space-between;
+}
+#leftColumn,
+#rightColumn,
+#middleColumn {
+  display: flex;
+  flex-direction: column;
+}
+#searchBar {
+  display: flex;
+}
