@@ -11,9 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/verify', 
-  userController.authenticate, 
-  (req, res) => res.status(200).redirect('/authorize'));
+app.get('/verify',
+  userController.authenticate,
+  (req, res) => {
+    console.log('!!!')
+    res.status(200).redirect('/authorize')
+  });
 
 app.get('/authorize',
   userController.authorize,
