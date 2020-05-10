@@ -3,6 +3,7 @@ const apiController = {};
 const fetch = require('node-fetch');
 
 apiController.getCountryData = (req, res, next) => {
+  console.log(req.params);
   const { country } = req.params;
   const url = `https://restcountries.eu/rest/v2/name/${country}`;
 
@@ -13,7 +14,16 @@ apiController.getCountryData = (req, res, next) => {
       const [countryObj] = data;
 
       // destructure preferred properties
-      const { name, alpha2Code, capital, region, area, population, languages, flag } = countryObj;
+      const {
+        name,
+        alpha2Code,
+        capital,
+        region,
+        area,
+        population,
+        languages,
+        flag,
+      } = countryObj;
 
       // format languages
       const langs = languages.map((lang) => lang.name);
@@ -43,8 +53,6 @@ apiController.getWeatherData = (req, res, next) => {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-
       const weatherData = {
         weather: data.weather[0].main,
         temp: data.main.temp,
