@@ -171,7 +171,5 @@ queryController.getFavs = (req, res, next) => {
       })
 }
 
-queryController.getFavs()
-
 
 module.exports = queryController;
