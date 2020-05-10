@@ -1,11 +1,20 @@
 const {client_id, client_secret} = require('../secrets/secrets.js');
+const fetch = require('node-fetch');
+const superagent = require('superagent');
+
 
 const redirect_uri = 'http://localhost:3000/home';
 
 const userController = {};
 
 userController.authorize   = (req, res, next) => {
-  console.log(req.query.code)
+  const reqbody = {
+    client_id: client_id, 
+    client_secret: client_secret,
+    grant_type: 'authorization_code',
+    code: req.query.code,
+    redirect_uri: redirect_uri
+};
   //AFTER AUTH CODE HAS BEEN RECEIVED:
   //make a post request to https://accounts.spotify.com/api/token
     //body must contain following parameters encoded in application/x-www-form-urlencoded:
@@ -17,17 +26,19 @@ userController.authorize   = (req, res, next) => {
       //**alternatively you can send client id and secret as request parameters in the post body
       //on success, spotify response has status code 200 in headerand and body will contain:
         // access_token, token_type, scope, expires_in, refresh_token
-  
-    //AFTER ACCESS TOKEN HAS BEEN RECEIVED:
-      //make requests to spotify web api with access token
-      //receive data
 
-    //after tokens expire, new ones must be requested in exchage for refresh_token
-      //POST https://accounts.spotify.com/api/token
-      //body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
-    //header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
-
-  return next();
+    superagent
+      .post('https://accounts.spotify.com/api/token')
+      .send(reqbody)
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .end((err, resp)=> {
+        if (err) {
+          console.log(err);
+          return next({err: 'ERROR WITH AUTHORIZATION'});
+        }
+        res.locals.token = resp.body;
+        return next();
+      })
 }
 
 userController.authenticate = (req, res, next) => {
@@ -44,11 +55,31 @@ userController.authenticate = (req, res, next) => {
     //user is asked to accept or deny and then is sent back to redirect uri
       //if accepted, response query string contains authorization code and value of state
       //if denied, query string contains error and value of state
-  
-    // return next();
+  }
+
+userController.getUserData = (req, res, next) => {
+    //AFTER ACCESS TOKEN HAS BEEN RECEIVED:
+      //make requests to spotify web api with access token
+      //receive data
+  fetch('https://api.spotify.com/v1/me', {
+    method: 'get',
+    headers: { 'Authorization': `Bearer ${res.locals.token.access_token}` }
+  })
+  .then(res => res.json())
+  .then(data => {
+    res.locals.user = data;
+    return next();
+  })
+  .catch(err => {
+    console.log(err);
+    return next({err: 'ERROR WITH GETTING USER DATA'})
+  })
 }
 
-
+    //after tokens expire, new ones must be requested in exchage for refresh_token
+      //POST https://accounts.spotify.com/api/token
+      //body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
+    //header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
 
 
 
