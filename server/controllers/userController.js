@@ -3,7 +3,7 @@ const superagent = require('superagent');
 // eslint-disable-next-line camelcase
 const { client_id, client_secret } = require('../secrets/secrets.js');
 
-const redirect_uri = 'http://localhost:3000/authorize';
+const redirect_uri = 'http://localhost:8080/authorize';
 // const redirect_uri = 'http://localhost:3000/home';
 
 const userController = {};
