@@ -19,7 +19,8 @@ app.get('/home',
   userController.authorize,
   // userController.getUserData,
   (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
-app.get('/api',
+
+app.get('/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
   (req, res) => res.status(200).send(res.locals.data));
