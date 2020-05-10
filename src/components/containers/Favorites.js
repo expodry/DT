@@ -5,7 +5,7 @@ import City from '../display/City';
 
 function Favorites(props) {
   // props.favorites(array of cities)   props.setCurrent(function to change current)
-
+  console.log('THIS IS FAVORITESSSS');
   const arrayOfCities = [];
   props.favorites.forEach((city, index) => {
     arrayOfCities.push(

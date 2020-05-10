@@ -33,7 +33,10 @@ app.get(
   '/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
-  (req, res) => res.status(200).send(res.locals.data),
+  (req, res) => {
+    console.log('ASDJASDHJASHJD', res.locals.data);
+    res.status(200).send(res.locals.data);
+  },
 );
 
 app.use(

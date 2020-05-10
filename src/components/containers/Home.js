@@ -13,50 +13,50 @@ import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 // search string value and just pass that function down to the star?
 //or even keep it outside of the window.
 
-const bigAssObject = {
-  countryData: {
-    name: 'Belgium',
-    capital: 'Brussels',
-    region: 'Europe',
-    area: 30528,
-    population: 11319511,
-    languages: ['Dutch', 'French', 'German'],
-    flag: 'https://restcountries.eu/data/bel.svg',
-  },
-  spotify: [
-    'someSong1',
-    'someSong2',
-    'someSong3',
-    'someSong4',
-    'someSong5',
-    'someSong6',
-    'someSong7',
-    'someSong8',
-    'someSong9',
-  ],
-  weather: {
-    temp: 60,
-    weather: 'cloudy',
-    wind: '25 km/h',
-  },
-};
-const bigAssObject2 = {
-  countryData: {
-    name: 'Russia',
-    capital: 'Moscow',
-    region: 'Europe-Asia',
-    area: 30528,
-    population: 11319511,
-    languages: ['Russian'],
-    flag: 'https://restcountries.eu/data/rus.svg',
-  },
-  spotify: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-  weather: {
-    temperature: 80,
-    sky: 'sunny',
-    wind: '5 km/h',
-  },
-};
+// const bigAssObject = {
+//   countryData: {
+//     name: 'Belgium',
+//     capital: 'Brussels',
+//     region: 'Europe',
+//     area: 30528,
+//     population: 11319511,
+//     languages: ['Dutch', 'French', 'German'],
+//     flag: 'https://restcountries.eu/data/bel.svg',
+//   },
+//   spotify: [
+//     'someSong1',
+//     'someSong2',
+//     'someSong3',
+//     'someSong4',
+//     'someSong5',
+//     'someSong6',
+//     'someSong7',
+//     'someSong8',
+//     'someSong9',
+//   ],
+//   weather: {
+//     temp: 60,
+//     weather: 'cloudy',
+//     wind: '25 km/h',
+//   },
+// };
+// const bigAssObject2 = {
+//   countryData: {
+//     name: 'Russia',
+//     capital: 'Moscow',
+//     region: 'Europe-Asia',
+//     area: 30528,
+//     population: 11319511,
+//     languages: ['Russian'],
+//     flag: 'https://restcountries.eu/data/rus.svg',
+//   },
+//   spotify: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+//   weather: {
+//     temperature: 80,
+//     sky: 'sunny',
+//     wind: '5 km/h',
+//   },
+// };
 const fakeUser = {
   name: 'Michael',
   favorites: ['London', 'Baku', 'Paris', 'NYC', 'Moscow'],
@@ -70,21 +70,23 @@ function Home() {
   const [cityCountryUserQuery, setQuery] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/`)
+    fetch(`http://localhost:3000/api/`)
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.name);
         setFavorites(user.favorites);
       });
   }, []);
+
   const grabLocationData = (location) => {
     let locationString = location
       .split(',')
       .map((word) => word.trim())
       .join('&');
-    fetch(`http://localhost:8080/api/${locationString}`)
+    fetch(`http://localhost:3000/api/${locationString}`)
       .then((data) => data.json())
       .then((response) => {
+        console.log(response);
         setCurrent(response);
       });
   };
@@ -160,8 +162,8 @@ function Home() {
     <div id="main">
       <div id="leftColumn">
         <div>Welcome, {username}!</div>
-        <Weather weather={current.weather} />
-        <Spotify songs={current.spotify} />
+        <Weather weather={current.weatherData} />
+        {/* <Spotify songs={current.spotify} /> */}
       </div>
       <div id="middleColumn">
         <label htmlFor="search">Search the destination!</label>
