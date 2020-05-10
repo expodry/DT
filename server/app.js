@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-// const apiController = require('./controllers/apiController');
+const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
 
 const app = express();
@@ -11,10 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// app.get('/api',
-//   apiController.getWikiData,
-//   (req, res) => res.status(200).json(res.locals.wikiData));
-
 app.get('/verify', 
   userController.authenticate, 
   (req, res) => res.status(200).redirect('/home'));
@@ -23,6 +19,10 @@ app.get('/home',
   userController.authorize,
   // userController.getUserData,
   (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
+app.get('/api',
+  apiController.getCountryData,
+  apiController.getWeatherData,
+  (req, res) => res.status(200).send(res.locals.data));
 
 
 app.use(
