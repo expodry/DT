@@ -7,7 +7,55 @@
 #middleColumn {
   display: flex;
   flex-direction: column;
+  width: 33%;
 }
 #searchBar {
   display: flex;
+}
+#favorites {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cityCard {
+  margin: 5px;
+  border: solid 1px grey;
+  border-radius: 2px;
+  box-shadow: 1px 1px 10px grey;
+  height: 100px;
+  width: 75%;
+}
+#weather {
+  margin: 5px;
+  /* background-color: aqua; */
+  border: solid 1px grey;
+  border-radius: 2px;
+  box-shadow: 1px 1px 10px grey;
+  height: 100px;
+  width: 75%;
+}
+#spotify {
+  margin: 5px;
+  width: 75%;
+  background-color: rgb(132, 189, 0);
+  border: solid 1px grey;
+  border-radius: 2px;
+  box-shadow: 1px 1px 10px grey;
+}
+.song {
+  height: 50px;
+  border: solid 1px grey;
+  border-radius: 2px;
+  box-shadow: 1px 1px 10px grey;
+  margin: 10px;
+  color: white;
+  background-color: black;
+}
+#searchBar {
+  width: 100%;
+}
+input {
+  border-radius: 2px;
+  border: solid 1px grey;
+  width: 100%;
 }

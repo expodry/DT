@@ -35,8 +35,8 @@ const bigAssObject = {
     'someSong9',
   ],
   weather: {
-    temperature: 60,
-    sky: 'cloudy',
+    temp: 60,
+    weather: 'cloudy',
     wind: '25 km/h',
   },
 };
@@ -65,41 +65,28 @@ const fakeUser = {
 function Home() {
   const [location, setLocation] = useState('');
   const [current, setCurrent] = useState({});
-  const [username, setUsername] = useState(fakeUser.name);
-  const [favorites, setFavorites] = useState(fakeUser.favorites);
+  const [username, setUsername] = useState('');
+  const [favorites, setFavorites] = useState([]);
   const [cityCountryUserQuery, setQuery] = useState('');
 
-  // useEffect(() => {
-  //   fetch('someurl', {
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Accept: 'application/json',
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((user) => {
-  //       setUserName(user.name);
-  //       setFavorites(user.favorites);
-  //     });
-  // }, []);
+  useEffect(() => {
+    fetch(`http://localhost:8080/api/`)
+      .then((res) => res.json())
+      .then((user) => {
+        setUserName(user.name);
+        setFavorites(user.favorites);
+      });
+  }, []);
   const grabLocationData = (location) => {
     let locationString = location
       .split(',')
       .map((word) => word.trim())
       .join('&');
-    // fetch(`http://localhost:8080/api/${locationString}`, {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Accept: 'application/json',
-    //   },
-    // })
-    //   .then((data) => data.json())
-    //   .then((response) => {
-    //     //receive a bigassaobject
-    //     //setCurrent(based on that obj);
-    //     console.log(response);
-    //   });
-    setCurrent(bigAssObject);
+    fetch(`http://localhost:8080/api/${locationString}`)
+      .then((data) => data.json())
+      .then((response) => {
+        setCurrent(response);
+      });
   };
 
   const toggleFav = (query) => {
@@ -120,8 +107,8 @@ function Home() {
       method = 'DELETE';
     }
 
-    fetch(`http://localhost:8080/api/toggleFav`, {
-      body: JSON.stringify({ city, country, user }),
+    fetch(`http://localhost:3000/api/toggleFav`, {
+      body: { city, country, user },
       method,
     })
       .then((data) => data.json())

@@ -19,7 +19,7 @@ function Favorites(props) {
     );
   });
 
-  return <div>{arrayOfCities}</div>;
+  return <div id="favorites">{arrayOfCities}</div>;
 }
 
 export default Favorites;

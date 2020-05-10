@@ -5,10 +5,14 @@ import { useState, useEffect } from 'react';
 function Spotify(props) {
   const arrayOfSongs = [];
   props.songs.forEach((song, index) =>
-    arrayOfSongs.push(<div key={'song' + index}>{song}</div>),
+    arrayOfSongs.push(
+      <div className="song" key={'song' + index}>
+        {song}
+      </div>,
+    ),
   );
 
-  return <div>{arrayOfSongs}</div>;
+  return <div id="spotify">{arrayOfSongs}</div>;
 }
 
 export default Spotify;

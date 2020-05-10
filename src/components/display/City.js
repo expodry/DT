@@ -15,21 +15,19 @@ const bigAssObject2 = {
   spotify: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
   weather: {
     temperature: 80,
-    sky: 'sunny',
+    weather: 'sunny',
     wind: '5 km/h',
   },
 };
 
 function City(props) {
-  // props will be an obj of country and city thus we can render Paris, France
-  //and when we click we pass in a proper string
   return (
     <div
+      className="cityCard"
       onClick={() => {
-        // props.setCurrent(
-        //   props.grabLocationData(`${props.city}, ${props.country}`),
-        // );
-        props.setCurrent(bigAssObject2);
+        props.setCurrent(
+          props.grabLocationData(`${props.city}, ${props.country}`),
+        );
       }}
     >
       {props.name}
