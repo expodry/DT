@@ -3,17 +3,17 @@ const apiController = {};
 const fetch = require('node-fetch');
 
 apiController.getCountryData = (req, res, next) => {
-  const location = 'Belgium';
-  const url = `https://restcountries.eu/rest/v2/name/${location}`;
+  const { country } = req.params;
+  const url = `https://restcountries.eu/rest/v2/name/${country}`;
 
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
       // destructure from array
-      const [country] = data;
+      const [countryObj] = data;
 
       // destructure preferred properties
-      const { name, alpha2Code, capital, region, area, population, languages, flag } = country;
+      const { name, alpha2Code, capital, region, area, population, languages, flag } = countryObj;
 
       // format languages
       const langs = languages.map((lang) => lang.name);
@@ -36,14 +36,15 @@ apiController.getCountryData = (req, res, next) => {
 };
 
 apiController.getWeatherData = (req, res, next) => {
-  console.log('got here');
-  const city = 'Brussels';
+  const { city } = req.params;
   const apiKey = '3f38b9994196b8f88058af69468302df';
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
+      console.log(data);
+
       const weatherData = {
         weather: data.weather[0].main,
         temp: data.main.temp,
@@ -51,11 +52,11 @@ apiController.getWeatherData = (req, res, next) => {
         temp_min: data.main.temp_min,
         temp_max: data.main.temp_max,
         humidity: data.main.humidity,
+        windSpeed: data.wind.speed,
         sunrise: data.sys.sunrise,
         sunset: data.sys.sunset,
       };
 
-      console.log(weatherData);
       res.locals.data.weatherData = weatherData;
       return next();
     })

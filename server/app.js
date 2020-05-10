@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/api',
+app.get('/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
   (req, res) => res.status(200).send(res.locals.data));
