@@ -15,6 +15,11 @@ app.get('/verify',
   userController.authenticate, 
   (req, res) => res.status(200).redirect('/home'));
 
+app.get('/authorize',
+  userController.authorize,
+  (req, res) => res.status(200).sendFile(path.reso)
+)
+
 app.get('/home', 
   userController.authorize,
   // userController.getUserData,
