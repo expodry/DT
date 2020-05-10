@@ -11,6 +11,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.get('/verify',
+  userController.authenticate,
+  (req, res) => {
+    console.log('!!!')
+    res.status(200).redirect('/authorize')
+  });
+
+app.get('/authorize',
+  userController.authorize,
+  (req, res) => res.redirect('/home'));
+
+
+app.get('/home', 
+  (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
+
+app.get('/api/:city&:country',
+  apiController.getCountryData,
+  apiController.getWeatherData,
+  (req, res) => res.status(200).send(res.locals.data));
+
 app.get('/verify', userController.authenticate, (req, res) =>
   res.status(200).redirect('/authorize'),
 );
