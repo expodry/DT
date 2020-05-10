@@ -8,7 +8,7 @@ import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 
 function Window(props) {
   // props.country={current.countryData} props.addFavorite={setFavorites} />
-
+  console.log('THIS IS WINDOWWWW');
   return (
     <div>
       <div>{props.country.name}</div>

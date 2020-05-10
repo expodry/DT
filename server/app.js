@@ -28,6 +28,33 @@ app.get('/api/:city&:country',
   apiController.getWeatherData,
   (req, res) => res.status(200).send(res.locals.data));
 
+app.get('/verify', userController.authenticate, (req, res) =>
+  res.status(200).redirect('/authorize'),
+);
+
+app.get('/authorize', userController.authorize, (req, res) =>
+  res.redirect('/home'),
+);
+
+app.get(
+  '/home',
+  // userController.authorize,
+  // userController.getUserData,
+  (req, res) =>
+    res
+      .status(200)
+      .sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+);
+
+app.get(
+  '/api/:city&:country',
+  apiController.getCountryData,
+  apiController.getWeatherData,
+  (req, res) => {
+    console.log('ASDJASDHJASHJD', res.locals.data);
+    res.status(200).send(res.locals.data);
+  },
+);
 
 app.use(
   '/',
