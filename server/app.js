@@ -34,7 +34,6 @@ app.use(
 
 // catch-all route handler for any requests to an unknown route
 app.all('*', (req, res) => {
-  console.log(__dirname);
   res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'));
 });
 

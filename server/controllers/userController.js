@@ -24,7 +24,7 @@ userController.authorize   = (req, res, next) => {
     //header must contain parameter:
       //Authorization: Basic *<base64 encoded client_id:client_secret>*
       //**alternatively you can send client id and secret as request parameters in the post body
-      //on success, spotify response has status code 200 in headerand and body will contain:
+      //on success, spotify will send in request body:
         // access_token, token_type, scope, expires_in, refresh_token
 
     superagent

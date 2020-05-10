@@ -39,6 +39,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: path.join(__dirname, 'dist'),
     proxy: {
+      '/verify': 'http://localhost:3000/',
       '/': 'http://localhost:3000/',
     },
   },
