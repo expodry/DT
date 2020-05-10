@@ -11,7 +11,7 @@ function App() {
           LOGIN PAGE
           <div>
             {' '}
-            <Link to="/verify">LOGIN WITH SPOTIFY</Link>
+            <a href="/verify">LOGIN WITH SPOTIFY</a>
           </div>
         </Route>
         <Route exact path="/home">
