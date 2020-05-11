@@ -63,13 +63,18 @@ userController.getUserData = (req, res, next) => {
   // AFTER ACCESS TOKEN HAS BEEN RECEIVED:
   // make requests to spotify web api with access token
   // receive data
+  console.log('cookie token', req.cookies.token.access_token)
   fetch('https://api.spotify.com/v1/me', {
     method: 'get',
-    headers: { Authorization: `Bearer ${res.locals.token.access_token}` },
+    headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
   })
-    .then((res) => res.json())
+    .then((resp) => {
+      console.log('???????');
+      return resp.json();
+    })
     .then((data) => {
-      res.locals.user = data;
+      res.locals.user = { display_name: data.display_name, email: data.email };
+      console.log(res.locals.user);
       return next();
     })
     .catch((err) => {
