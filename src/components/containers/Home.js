@@ -11,30 +11,24 @@ import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 
-const fakeUser = {
-  name: 'Michael',
-  favorites: ['London', 'Baku', 'Paris', 'NYC', 'Moscow'],
-  //each fav is gonna be an object of country and city
-};
 function Home() {
   const [current, setCurrent] = useState({});
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [favorites, setFavorites] = useState([]);
-  const [cityCountryUserQuery, setQuery] = useState('');
-
+  const [query, setQuery] = useState('');
   useEffect(() => {
     fetch(`http://localhost:8080/api/user`)
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.display_name);
         setEmail(user.email);
-        // setFavorites(user.favorites);
+        setFavorites(user.favsArray);
       })
       .catch((err) => err);
   }, []);
-
   const grabLocationData = (location) => {
+    console.log(location);
     if (!location) return;
     let locationString = location
       .split(',')
@@ -44,30 +38,18 @@ function Home() {
       .then((data) => data.json())
       .then((response) => {
         setCurrent(response);
+        setQuery(email + ', ' + response.userQuery);
       });
   };
 
   const toggleFav = (query) => {
     const values = query.split(',').map((elem) => elem.trim());
-    const city = values[0];
-    const country = values[1];
-    const user = values[2];
+    const city = values[1];
+    const country = values[2];
+    const email = values[0];
     let method = 'POST';
-    if (
-      favorites.includes(
-        JSON.stringify({
-          city,
-          country,
-          user,
-        }),
-      )
-    ) {
-      method = 'DELETE';
-    }
-
-    fetch(`http://localhost:8080/api/toggleFav`, {
-      body: { city, country, user },
-      method,
+    fetch(`http://localhost:8080/api/toggleFav/${city}&${country}&${email}`, {
+      method: 'POST',
     })
       .then((data) => data.json())
       .then((updatedFavs) => {
@@ -95,7 +77,7 @@ function Home() {
   let FavIcon = (
     <span className="favIcon">
       <FAIcon
-        onClick={() => toggleFav(cityCountryUserQuery)}
+        onClick={() => toggleFav(query)}
         icon={solidStar}
         style={{ color: 'steelblue' }}
       />
