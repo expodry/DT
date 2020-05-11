@@ -4,6 +4,7 @@ const path = require('path');
 const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
+const queryController = require('./controllers/queryController');
 
 const app = express();
 const port = 3000;
@@ -36,8 +37,10 @@ app.get(
   (req, res) => res.status(200).send(res.locals.data),
 );
 
-app.get('/api/user', userController.getUserData, (req, res) =>
-  res.status(200).send(res.locals.user),
+app.get('/api/user',
+  userController.getUserData,
+  queryController.createOrFindUser,
+  (req, res) => res.status(200).send(res.locals.user),
 );
 
 app.use(
