@@ -38,7 +38,6 @@ apiController.getCountryData = (req, res, next) => {
         flag,
       };
       res.locals.data = { countryData };
-      console.log(res.locals.data.countryData);
 
       // console.log(res.locals.data);
       return next();
@@ -68,7 +67,6 @@ apiController.getWeatherData = (req, res, next) => {
         timezone: data.timezone,
       };
       res.locals.data.weatherData = weatherData;
-      console.log(res.locals.data.weatherData);
 
       return next();
     })
@@ -79,13 +77,17 @@ apiController.getWeatherData = (req, res, next) => {
 
 apiController.getSpotifyData = (req, res, next) => {
   // fetch featured playlist in specified country from spotify
-  const url = `https://api.spotify.com/v1/browse/categories/toplists/playlists?country=${res.locals.data.countryData.alpha2Code}`;
   const accessToken = req.cookies.token.access_token;
+  const { alpha2Code } = res.locals.data.countryData;
   let country = res.locals.data.countryData.name;
-  console.log('INPUT', url, accessToken, country);
-  if (country === 'United States of America') {
+  const url = `https://api.spotify.com/v1/browse/categories/toplists/playlists?country=${alpha2Code}`;
+
+  if (alpha2Code === 'US') {
     country = 'United States';
+  } else if (alpha2Code === 'GB') {
+    country = 'United Kingdom';
   }
+
   // use access token cookie
   const options = {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -95,8 +97,10 @@ apiController.getSpotifyData = (req, res, next) => {
   fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
-      console.log('THIS... IS... DATA!!!!', data.playlists.items);
       // get tracks href of top 50 regional playlist
+
+      // list of feature playlists for testing:
+      // console.log(data.playlists.items.map((playlist) => playlist.name));
       const tracksURL = data.playlists.items.find(
         (playlist) => playlist.name === `${country} Top 50`,
       ).tracks.href;
@@ -112,21 +116,19 @@ apiController.getSpotifyData = (req, res, next) => {
           }));
 
           res.locals.data.trackList = trackList;
-          console.log(res.locals.data);
-
           return next();
         })
-        .catch((err) => next(`Error in getSpotifyData: ${err}`));
+        .catch((err) => {
+          console.log('error fetching specific playlist');
+          res.locals.data.trackList = [];
+          return next();
+        });
     })
-    .catch((err) => next(`Error in getSpotifyData: ${err}`));
+    .catch((err) => {
+      console.log('spotify not available in specified country');
+      res.locals.data.trackList = [];
+      return next();
+    });
 };
-
-// apiController.getData = async (req, res, next) => {
-//   const obj = await apiController.getCountryData();
-//   console.log('returned obj: ', obj);
-//   res.locals.data = obj;
-//   console.log(res.locals.data);
-//   return next();
-// };
 
 module.exports = apiController;
