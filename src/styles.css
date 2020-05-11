@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
 body {
+  color: white;
   background-image: url(https://files.123freevectors.com/wp-content/original/104312-yellow-stripes-pattern.jpg);
   font-family: 'Rubik', sans-serif;
   background-repeat: repeat-y;
@@ -88,6 +89,9 @@ input:focus {
   background-color: rgb(66, 65, 52);
   opacity: 75%;
 }
+.cityCard:hover {
+  cursor: pointer;
+}
 #weather {
   opacity: 75%;
   display: flex;
@@ -121,6 +125,9 @@ input:focus {
   flex-direction: column;
   justify-content: space-around;
 }
+.black {
+  color: black;
+}
 #spotify {
   opacity: 75%;
   border-radius: 10px;
@@ -131,6 +138,13 @@ input:focus {
   padding: 10px;
   background-color: rgb(66, 65, 52);
 }
+#spotifyLogin {
+  margin-top: 20%;
+}
+#favIcon {
+  align-self: flex-end;
+  padding-right: 20%;
+}
 .song {
   display: flex;
   flex-direction: column;
@@ -140,6 +154,7 @@ input:focus {
   border: solid 1px grey;
   border-radius: 2px;
   box-shadow: 1px 1px 10px white;
+  padding: 3px;
   margin: 10px;
   color: white;
   background-color: black;

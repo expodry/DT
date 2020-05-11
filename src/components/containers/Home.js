@@ -1,5 +1,4 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Spotify from './Spotify';
 import Weather from './Weather';
@@ -8,8 +7,8 @@ import Search from './Search';
 
 import Favorites from './Favorites';
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
-import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 
 function Home() {
   const [current, setCurrent] = useState({});
@@ -28,9 +27,8 @@ function Home() {
       .catch((err) => err);
   }, []);
   const grabLocationData = (location) => {
-    console.log(location);
     if (!location) return;
-    let locationString = location
+    const locationString = location
       .split(',')
       .map((word) => word.trim())
       .join('&');
@@ -74,15 +72,20 @@ function Home() {
         </div>
       </div>
     );
+
   let FavIcon = (
     <span className="favIcon">
       <FAIcon
-        onClick={() => toggleFav(query)}
-        icon={solidStar}
-        style={{ color: 'steelblue' }}
+        onClick={() => {
+          toggleFav(query);
+        }}
+        size="2x"
+        icon={regStar}
+        style={{ color: 'rgb(66, 65, 52)' }}
       />
     </span>
   );
+
   return (
     <div id="main">
       <div id="leftColumn">
@@ -97,7 +100,7 @@ function Home() {
       <div id="middleColumn">
         <Search grabLocationData={grabLocationData} />
 
-        {FavIcon}
+        <div id="favIcon">{FavIcon}</div>
 
         <Window setFavorites={setFavorites} country={current.countryData} />
       </div>

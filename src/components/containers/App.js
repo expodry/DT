@@ -2,17 +2,28 @@ import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
 import Home from './Home';
+import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
+import { faSpotify as Spotify } from '@fortawesome/fontawesome-free-brands';
 
 function App() {
+  let FavIcon = (
+    <span className="favIcon">
+      <FAIcon size="7x" icon={Spotify} style={{ color: 'green' }} />
+    </span>
+  );
   return (
     <div id="app">
       <Switch>
         <Route exact path="/">
-          <center>LOGIN PAGE</center>
-          <div id="spotifyLogin">
+          <div>
             {' '}
-            <center>
-              <a href="/verify">LOGIN WITH SPOTIFY</a>
+            <center id="spotifyLogin">
+              <a className="black" href="/verify">
+                {FavIcon}
+                <br></br>
+                <br></br>
+                LOGIN WITH SPOTIFY
+              </a>
             </center>
           </div>
         </Route>
