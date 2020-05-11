@@ -30,9 +30,14 @@ app.get('/home',
 
 app.get(
   '/api/:city&:country',
+  apiController.setQuery,
   apiController.getCountryData,
   apiController.getWeatherData,
   apiController.getSpotifyData,
+  (req, res, next) => {
+    console.log(res.locals.data);
+    return next();
+  },
   (req, res) => res.status(200).send(res.locals.data),
 );
 
