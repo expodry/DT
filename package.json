@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/app.js",
-    "dev": "NODE_ENV=development webpack-dev-server --open & NODE_ENV=development nodemon server/app.js",
+    "dev": "NODE_ENV=development webpack-dev-server --open --hot & NODE_ENV=development nodemon server/app.js",
     "build": "NODE_ENV=production && webpack"
   },
   "keywords": [],
