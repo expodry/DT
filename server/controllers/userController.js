@@ -44,7 +44,6 @@ userController.authorize = (req, res, next) => {
 
 userController.authenticate = (req, res, next) => {
   // //define scopes
-  console.log('test');
   const scopes = 'user-read-private user-read-email';
   // redirect to spotify page presenting scope
   res.redirect(`${'https://accounts.spotify.com/authorize'
@@ -63,18 +62,15 @@ userController.getUserData = (req, res, next) => {
   // AFTER ACCESS TOKEN HAS BEEN RECEIVED:
   // make requests to spotify web api with access token
   // receive data
-  console.log('cookie token', req.cookies.token.access_token)
   fetch('https://api.spotify.com/v1/me', {
     method: 'get',
     headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
   })
     .then((resp) => {
-      console.log('???????');
       return resp.json();
     })
     .then((data) => {
       res.locals.user = { display_name: data.display_name, email: data.email };
-      console.log(res.locals.user);
       return next();
     })
     .catch((err) => {

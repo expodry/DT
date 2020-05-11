@@ -22,7 +22,6 @@ app.get('/verify',
 app.get('/authorize',
   userController.authorize,
   cookieController.setCookie,
-  // userController.getUserData,
   (req, res) => res.redirect('/home'));
 
 
