@@ -47,11 +47,15 @@ userController.authenticate = (req, res, next) => {
   console.log('test');
   const scopes = 'user-read-private user-read-email';
   // redirect to spotify page presenting scope
-  res.redirect(`${'https://accounts.spotify.com/authorize'
-    + '?response_type=code'
-    + '&client_id='}${client_id
-  }${scopes ? `&scope=${encodeURIComponent(scopes)}` : ''
-  }&redirect_uri=${encodeURIComponent(redirect_uri)}`);
+  res.redirect(
+    `${
+      'https://accounts.spotify.com/authorize' +
+      '?response_type=code' +
+      '&client_id='
+    }${client_id}${
+      scopes ? `&scope=${encodeURIComponent(scopes)}` : ''
+    }&redirect_uri=${encodeURIComponent(redirect_uri)}`,
+  );
   //* *add state */
   // need client id, scopes, redirect uri, (preferrably) state
   // user is asked to accept or deny and then is sent back to redirect uri
@@ -63,7 +67,7 @@ userController.getUserData = (req, res, next) => {
   // AFTER ACCESS TOKEN HAS BEEN RECEIVED:
   // make requests to spotify web api with access token
   // receive data
-  console.log('cookie token', req.cookies.token.access_token)
+  console.log('cookie token', req.cookies.token.access_token);
   fetch('https://api.spotify.com/v1/me', {
     method: 'get',
     headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
@@ -88,5 +92,9 @@ userController.getUserData = (req, res, next) => {
 // body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
 // header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
 
+//after tokens expire, new ones must be requested in exchage for refresh_token
+//POST https://accounts.spotify.com/api/token
+//body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
+//header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
 
 module.exports = userController;

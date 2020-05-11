@@ -5,7 +5,6 @@ const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
 
-
 const app = express();
 const port = 3000;
 
@@ -13,31 +12,33 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/verify',
-  userController.authenticate,
-  (req, res) => {
-    res.status(200).redirect('/authorize');
-  });
+app.get('/verify', userController.authenticate, (req, res) => {
+  res.status(200).redirect('/authorize');
+});
 
-app.get('/authorize',
+app.get(
+  '/authorize',
   userController.authorize,
   cookieController.setCookie,
   // userController.getUserData,
-  (req, res) => res.redirect('/home'));
+  (req, res) => res.redirect('/home'),
+);
 
+app.get('/home', (req, res) =>
+  res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+);
 
-app.get('/home',
-  (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
-
-app.get('/api/:city&:country',
+app.get(
+  '/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
   apiController.getSpotifyData,
-  (req, res) => res.status(200).send(res.locals.data));
+  (req, res) => res.status(200).send(res.locals.data),
+);
 
-app.get('/api/user',
-  userController.getUserData,
-  (req, res) => res.status(200).send(res.locals.user));
+app.get('/api/user', userController.getUserData, (req, res) =>
+  res.status(200).send(res.locals.user),
+);
 
 app.use(
   '/',

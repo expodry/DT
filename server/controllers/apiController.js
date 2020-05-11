@@ -6,7 +6,7 @@ apiController.getCountryData = (req, res, next) => {
   const { country } = req.params;
   const url = `https://restcountries.eu/rest/v2/name/${country}`;
 
-  fetch(url) 
+  fetch(url)
     .then((response) => response.json())
     .then((data) => {
       // destructure from array
@@ -37,8 +37,9 @@ apiController.getCountryData = (req, res, next) => {
         languages: langs,
         flag,
       };
-
       res.locals.data = { countryData };
+      console.log(res.locals.data.countryData);
+
       // console.log(res.locals.data);
       return next();
     })
@@ -66,8 +67,9 @@ apiController.getWeatherData = (req, res, next) => {
         sunset: data.sys.sunset,
         timezone: data.timezone,
       };
-
       res.locals.data.weatherData = weatherData;
+      console.log(res.locals.data.weatherData);
+
       return next();
     })
     .catch((err) => {
@@ -79,8 +81,11 @@ apiController.getSpotifyData = (req, res, next) => {
   // fetch featured playlist in specified country from spotify
   const url = `https://api.spotify.com/v1/browse/categories/toplists/playlists?country=${res.locals.data.countryData.alpha2Code}`;
   const accessToken = req.cookies.token.access_token;
-  const country = res.locals.data.countryData.name;
-
+  let country = res.locals.data.countryData.name;
+  console.log('INPUT', url, accessToken, country);
+  if (country === 'United States of America') {
+    country = 'United States';
+  }
   // use access token cookie
   const options = {
     headers: { Authorization: `Bearer ${accessToken}` },
@@ -90,22 +95,25 @@ apiController.getSpotifyData = (req, res, next) => {
   fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
+      console.log('THIS... IS... DATA!!!!', data.playlists.items);
       // get tracks href of top 50 regional playlist
-      const tracksURL = data.playlists.items.find((playlist) => playlist.name === `${country} Top 50`).tracks.href;
+      const tracksURL = data.playlists.items.find(
+        (playlist) => playlist.name === `${country} Top 50`,
+      ).tracks.href;
 
       // fetch track list of regional top 50
       fetch(tracksURL, options)
         .then((response) => response.json())
         .then((tracks) => {
           // format tracks
-          const trackList = tracks.items.map((track) => (
-            {
-              name: track.track.name,
-              by: track.track.artists[0].name,
-            }
-          ));
+          const trackList = tracks.items.map((track) => ({
+            name: track.track.name,
+            by: track.track.artists[0].name,
+          }));
 
           res.locals.data.trackList = trackList;
+          console.log(res.locals.data);
+
           return next();
         })
         .catch((err) => next(`Error in getSpotifyData: ${err}`));

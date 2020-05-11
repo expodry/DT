@@ -10,7 +10,7 @@ function Window(props) {
   // props.country={current.countryData} props.addFavorite={setFavorites} />
   console.log('THIS IS WINDOWWWW');
   return (
-    <div>
+    <div id="window">
       <div>{props.country.name}</div>
       <img width="100%" height="200" src={props.country.flag} />
       <Info countryData={props.country} />

@@ -3,8 +3,6 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 function Info(props) {
-  //props.countryData
-
   const languages = [];
   props.countryData.languages.forEach((language, index) =>
     languages.push(<li key={'language' + index}>{language}</li>),
@@ -15,13 +13,13 @@ function Info(props) {
       <ul>
         <li>Capital: {props.countryData.capital}</li>
         <li>Region: {props.countryData.region}</li>
-        <li>Area: {props.countryData.area}</li>
+        <li>Area: {props.countryData.area} km²</li>
         <li>Population: {props.countryData.population}</li>
       </ul>
-      <ol>
+      <ul>
         Languages:
         {languages}
-      </ol>
+      </ul>
     </div>
   );
 }
