@@ -1,6 +1,5 @@
 const fetch = require('node-fetch');
 const superagent = require('superagent');
-// eslint-disable-next-line camelcase
 const { client_id, client_secret } = require('../secrets/secrets.js');
 
 const redirect_uri = 'http://localhost:8080/authorize';
@@ -48,9 +47,9 @@ userController.authenticate = (req, res, next) => {
   // redirect to spotify page presenting scope
   res.redirect(
     `${
-      'https://accounts.spotify.com/authorize' +
-      '?response_type=code' +
-      '&client_id='
+      'https://accounts.spotify.com/authorize'
+      + '?response_type=code'
+      + '&client_id='
     }${client_id}${
       scopes ? `&scope=${encodeURIComponent(scopes)}` : ''
     }&redirect_uri=${encodeURIComponent(redirect_uri)}`,
@@ -70,9 +69,7 @@ userController.getUserData = (req, res, next) => {
     method: 'get',
     headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
   })
-    .then((resp) => {
-      return resp.json();
-    })
+    .then((resp) => resp.json())
     .then((data) => {
       console.log(data);
       if (data.error) {
@@ -92,11 +89,7 @@ userController.getUserData = (req, res, next) => {
 // after tokens expire, new ones must be requested in exchage for refresh_token
 // POST https://accounts.spotify.com/api/token
 // body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
-// header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
-
-//after tokens expire, new ones must be requested in exchage for refresh_token
-//POST https://accounts.spotify.com/api/token
-//body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
-//header must contain following parameter: Authorization: Basic <base64 encoded client_id:client_secret>
+// header must contain following parameter: 
+// Authorization: Basic <base64 encoded client_id:client_secret>
 
 module.exports = userController;

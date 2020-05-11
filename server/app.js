@@ -20,7 +20,8 @@ app.get(
   '/authorize',
   userController.authorize,
   cookieController.setCookie,
-  (req, res) => res.redirect('/home'));
+  (req, res) => res.redirect('/home'),
+);
 
 
 app.get('/home',
@@ -36,11 +37,9 @@ app.get(
   (req, res) => res.status(200).send(res.locals.data),
 );
 
-app.get('/api/user', 
-userController.getUserData,
- (req, res) =>
-  res.status(200).send(res.locals.user),
-);
+app.get('/api/user',
+  userController.getUserData,
+  (req, res) => res.status(200).send(res.locals.user));
 
 app.use(
   '/',
