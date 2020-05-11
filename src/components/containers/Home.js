@@ -70,7 +70,7 @@ function Home() {
   const [cityCountryUserQuery, setQuery] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/`)
+    fetch(`http://localhost:8080/api/`)
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.name);
@@ -83,7 +83,7 @@ function Home() {
       .split(',')
       .map((word) => word.trim())
       .join('&');
-    fetch(`http://localhost:3000/api/${locationString}`)
+    fetch(`http://localhost:8080/api/${locationString}`)
       .then((data) => data.json())
       .then((response) => {
         console.log(response);
@@ -109,7 +109,7 @@ function Home() {
       method = 'DELETE';
     }
 
-    fetch(`http://localhost:3000/api/toggleFav`, {
+    fetch(`http://localhost:8080/api/toggleFav`, {
       body: { city, country, user },
       method,
     })

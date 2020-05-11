@@ -3,6 +3,8 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
+const cookieController = require('./controllers/cookieController');
+
 
 const app = express();
 const port = 3000;
@@ -19,6 +21,7 @@ app.get('/verify',
 
 app.get('/authorize',
   userController.authorize,
+  cookieController.setCookie,
   (req, res) => res.redirect('/home'));
 
 
