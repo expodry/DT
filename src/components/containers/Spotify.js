@@ -3,9 +3,9 @@ import { Switch, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 function Spotify(props) {
-  if (!props.songs) {
+  if (!props.songs.length) {
     return (
-      <div className="song">
+      <div id="spotify">
         Sorry, looks like spotify is not available in this country :(
       </div>
     );
