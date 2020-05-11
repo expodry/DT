@@ -7,7 +7,7 @@ function Spotify(props) {
   props.songs.forEach((song, index) =>
     arrayOfSongs.push(
       <div className="song" key={'song' + index}>
-        {song}
+        {song.name} by {song.by}
       </div>,
     ),
   );

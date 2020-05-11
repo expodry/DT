@@ -19,6 +19,7 @@ const fakeUser = {
 function Home() {
   const [current, setCurrent] = useState({});
   const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [favorites, setFavorites] = useState([]);
   const [cityCountryUserQuery, setQuery] = useState('');
 
@@ -27,6 +28,7 @@ function Home() {
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.display_name);
+        setEmail(user.email);
         // setFavorites(user.favorites);
       })
       .catch((err) => err);
@@ -101,7 +103,7 @@ function Home() {
       <div id="leftColumn">
         <div>Welcome, {username}!</div>
         <Weather weather={current.weatherData} />
-        {/* <Spotify songs={current.spotify} /> */}
+        <Spotify songs={current.trackList} />
       </div>
       <div id="middleColumn">
         <Search grabLocationData={grabLocationData} />
