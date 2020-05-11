@@ -3,7 +3,16 @@ const apiController = {};
 const fetch = require('node-fetch');
 
 apiController.getCountryData = (req, res, next) => {
-  const { country } = req.params;
+  let { country } = req.params;
+  country = country.toLowerCase();
+
+  // handle common inputs that result in errors unexpected country
+  if (country === 'uk') {
+    country = 'GB';
+  } else if (country === 'us' || country === 'united states') {
+    country = 'usa';
+  }
+
   const url = `https://restcountries.eu/rest/v2/name/${country}`;
 
   fetch(url)
