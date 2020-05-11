@@ -1,6 +1,4 @@
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 
 function Spotify(props) {
   if (!props.songs.length) {
@@ -15,6 +13,10 @@ function Spotify(props) {
     arrayOfSongs.push(
       <div className="song" key={'song' + i}>
         {props.songs[i].name} by {props.songs[i].by}
+        <br></br>
+        <a target="blank" href={props.songs[i].url}>
+          Listen
+        </a>
       </div>,
     );
   }

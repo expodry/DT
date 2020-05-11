@@ -34,7 +34,7 @@ function Weather(props) {
   }
   let icon = isDay() ? solidSun : solidMoon;
   let iconColor = isDay() ? 'orange' : 'white';
-  let color = 'rgb(66, 65, 52)';
+  const color = 'rgb(66, 65, 52)';
   if (props.weather.weather === 'Clouds') {
     document.body.style.backgroundImage =
       'url(https://c1.wallpaperflare.com/preview/717/892/904/air-sky-cloud-background.jpg)';
@@ -63,16 +63,8 @@ function Weather(props) {
           {<br></br>}
         </span>
         <span className="weather-text">
-          Wind: {props.weather.windSpeed} {<br></br>}
+          Wind: {Math.round(props.weather.windSpeed)} km/h {<br></br>}
         </span>{' '}
-      </div>
-      <div>
-        <FAIcon
-          onClick={() => favClicked(id)}
-          icon={icon}
-          className="fas fa-camera fa-3x"
-          style={{ color: iconColor }}
-        />
       </div>
     </div>
   );
