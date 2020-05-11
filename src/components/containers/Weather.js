@@ -36,6 +36,8 @@ function Weather(props) {
   let iconColor = isDay() ? 'orange' : 'white';
   let color = 'rgb(66, 65, 52)';
   if (props.weather.weather === 'Clouds') {
+    document.body.style.backgroundImage =
+      'url(https://c1.wallpaperflare.com/preview/717/892/904/air-sky-cloud-background.jpg)';
     icon = solidCloud;
     iconColor = 'white';
   }
@@ -45,7 +47,6 @@ function Weather(props) {
     icon = solidRain;
     iconColor = 'white';
   }
-  console.log(isDay());
   document.body.style.color = 'white';
 
   let style = {

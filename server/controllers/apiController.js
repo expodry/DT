@@ -2,6 +2,11 @@
 const apiController = {};
 const fetch = require('node-fetch');
 
+apiController.setQuery = (req, res, next) => {
+  res.locals.data = { userQuery: `${req.params.city}, ${req.params.country}` };
+  return next();
+};
+
 apiController.getCountryData = (req, res, next) => {
   let { country } = req.params;
   country = country.toLowerCase();
@@ -46,7 +51,7 @@ apiController.getCountryData = (req, res, next) => {
         languages: langs,
         flag,
       };
-      res.locals.data = { countryData };
+      res.locals.data.countryData = countryData;
 
       // console.log(res.locals.data);
       return next();
@@ -108,7 +113,7 @@ apiController.getSpotifyData = (req, res, next) => {
     .then((data) => {
       // get tracks href of top 50 regional playlist
 
-      // list of feature playlists for testing:
+      // list of featured playlists for testing:
       // console.log(data.playlists.items.map((playlist) => playlist.name));
       const tracksURL = data.playlists.items.find(
         (playlist) => playlist.name === `${country} Top 50`,
@@ -122,6 +127,7 @@ apiController.getSpotifyData = (req, res, next) => {
           const trackList = tracks.items.map((track) => ({
             name: track.track.name,
             by: track.track.artists[0].name,
+            url: track.track.external_urls.spotify,
           }));
 
           res.locals.data.trackList = trackList;

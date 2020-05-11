@@ -43,7 +43,6 @@ function Home() {
     fetch(`http://localhost:8080/api/${locationString}`)
       .then((data) => data.json())
       .then((response) => {
-        console.log(response);
         setCurrent(response);
       });
   };
@@ -79,14 +78,18 @@ function Home() {
   if (!Object.keys(current).length)
     return (
       <div>
-        <Search grabLocationData={grabLocationData} />
-        <div>Welcome, {username}!</div>
-
-        <Favorites
-          favorites={favorites}
-          grabLocationData={grabLocationData}
-          setCurrent={setCurrent}
-        />
+        <div id="leftColumn">
+          <Search grabLocationData={grabLocationData} />
+          <div className="welcoming">Welcome, {username}!</div>
+        </div>
+        <div id="middleColumn"></div>
+        <div className="rightColumn">
+          <Favorites
+            favorites={favorites}
+            grabLocationData={grabLocationData}
+            setCurrent={setCurrent}
+          />
+        </div>
       </div>
     );
   let FavIcon = (
@@ -101,7 +104,11 @@ function Home() {
   return (
     <div id="main">
       <div id="leftColumn">
-        <div>Welcome, {username}!</div>
+        <div className="welcoming">
+          {' '}
+          <br></br>Welcome, {username}!<br></br>
+          <br></br>{' '}
+        </div>
         <Weather weather={current.weatherData} />
         <Spotify songs={current.trackList} />
       </div>
