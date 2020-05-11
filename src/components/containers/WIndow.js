@@ -14,7 +14,7 @@ function Window(props) {
       <div>{props.country.name}</div>
       <img width="100%" height="200" src={props.country.flag} />
       <Info countryData={props.country} />
-      <a href={`https://en.wikipedia.org/wiki/${props.country.name}`}>
+      <a id="wiki" href={`https://en.wikipedia.org/wiki/${props.country.name}`}>
         Read more on wiki!
       </a>
     </div>

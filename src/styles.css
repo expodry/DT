@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
 body {
+  background-image: url(https://files.123freevectors.com/wp-content/original/104312-yellow-stripes-pattern.jpg);
   font-family: 'Rubik', sans-serif;
-  background-image: url(http://4dadventurehotsprings.com/wp-content/uploads/2016/06/Dark-Grey-Pattern-Background.jpg);
-  /* background-image: url(https://files.123freevectors.com/wp-content/original/104312-yellow-stripes-pattern.jpg); */
+  background-repeat: repeat-y;
+  background-size: cover;
 }
 #main {
   display: flex;
@@ -15,13 +16,61 @@ body {
   flex-direction: column;
   width: 33%;
 }
-#searchBar {
+
+/* #app {
+  color: white;
+  align-self: center;
   display: flex;
+  flex-direction: column;
+  margin: 15px;
+  border: solid 1px grey;
+  box-shadow: 1px 1px 10px grey;
+  background-color: rgb(66, 65, 52);
+  opacity: 75%;
+  border-radius: 10px;
+  width: 95%;
+  padding: 10px;
+} */
+#searchForm {
+  margin: 15px;
+  border: solid 1px grey;
+  box-shadow: 1px 1px 10px grey;
+  background-color: rgb(66, 65, 52);
+  opacity: 75%;
+  border-radius: 10px;
+  width: 100%;
+  padding: 10px;
+}
+a {
+  /* text-decoration: none; */
+  color: white;
+}
+input {
+  border-radius: 5px;
+  background-color: rgb(66, 65, 52);
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 5px;
+}
+input:focus {
+  outline: none !important;
 }
 #favorites {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.welcoming {
+  text-align: center;
+  margin: 15px;
+  border: solid 1px grey;
+  box-shadow: 1px 1px 10px grey;
+  background-color: rgb(66, 65, 52);
+  opacity: 75%;
+  border-radius: 10px;
+  width: 75%;
+  padding: 10px;
 }
 .cityCard {
   display: flex;
@@ -57,9 +106,9 @@ body {
   margin: 15px;
   border: solid 1px grey;
   border-radius: 10px;
-
   box-shadow: 1px 1px 10px grey;
   background-color: rgb(66, 65, 52);
+  width: 100%;
 }
 .weather-text {
   color: white;
@@ -72,18 +121,24 @@ body {
   justify-content: space-around;
 }
 #spotify {
-  margin: 5px;
-  width: 75%;
-  background-color: rgb(132, 189, 0);
+  opacity: 75%;
+  border-radius: 10px;
+  margin: 15px;
   border: solid 1px grey;
-  border-radius: 2px;
   box-shadow: 1px 1px 10px grey;
+  width: 75%;
+  padding: 10px;
+  background-color: rgb(66, 65, 52);
 }
 .song {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
   height: 50px;
   border: solid 1px grey;
   border-radius: 2px;
-  box-shadow: 1px 1px 10px grey;
+  box-shadow: 1px 1px 10px white;
   margin: 10px;
   color: white;
   background-color: black;
