@@ -46,6 +46,15 @@ app.get(
   (req, res) => res.status(200).send(res.locals.data),
 );
 
+app.post(
+  '/api/toggleFav/:city&:country&:email',
+  queryController.addFav,
+  queryController.getFavs,
+  (req, res) => {
+    res.status(200).send(res.locals.user.favsArray);
+  },
+);
+
 app.get(
   '/api/user',
   userController.getUserData,

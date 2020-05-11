@@ -24,14 +24,11 @@ function City(props) {
   return (
     <div
       className="cityCard"
-      onClick={() => {
-        // props.setCurrent(
-        //   props.grabLocationData(`${props.city}, ${props.country}`),
-        // );
-        props.setCurrent(bigAssObject2);
-      }}
+      onClick={() =>
+        props.grabLocationData(`${props.name.city}, ${props.name.country}`)
+      }
     >
-      <span className="cityName">{props.name}</span>
+      <span className="cityName">{props.name.city}</span>
     </div>
   );
 }

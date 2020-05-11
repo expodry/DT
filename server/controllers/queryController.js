@@ -52,11 +52,9 @@ queryController.createOrFindUser = (req, res, next) => {
 
 // Add a new favourite city to database
 queryController.addFav = (req, res, next) => {
-  // add a favourite city (+ country) to database
-  // const username = 'koalaparty'; // res.locals.username
-  const userEmail = 'koalaparty@gmail.com'; // get from params
-  const city = 'Melbourne'; // res.locals.city;
-  const country = 'Australia'; // res.locals.country / or from req.params/body
+  const userEmail = req.params.email;
+  const city = req.params.city;
+  const country = req.params.country;
   const reqParams = [userEmail, city, country];
   // if city not in cities table, add to cities table
   const checkCityQuery = 'SELECT id FROM cities WHERE city_name = $1';
@@ -77,12 +75,10 @@ queryController.addFav = (req, res, next) => {
   db.query(checkCityQuery, [city])
     .then((response) => response)
     .then((data) => {
-      console.log(data);
       if (data.rowCount === 0) {
         db.query(addCityQuery, [city, country])
           .then((response) => response)
           .then((data) => {
-            console.log(data);
             return data;
           });
       } else {
@@ -95,7 +91,6 @@ queryController.addFav = (req, res, next) => {
         .then((response) => response)
         .then((data) => next())
         .catch((err) => {
-          console.log(err);
           return next({
             log: 'Error occurred in queryController.addFav',
             message: { err: `The following error occurred: ${err}` },
@@ -103,7 +98,6 @@ queryController.addFav = (req, res, next) => {
         });
     })
     .catch((err) => {
-      console.log(err);
       return next({
         log:
           'Error occurred in queryController.addFav when trying to create a new city',
@@ -149,8 +143,15 @@ queryController.getFavs = (req, res, next) => {
   // retrieve fave countries and cities from db for individual user
   // get all favourites from countries_cities_users table
   // if no favourites, send user to next middleware and send empty array
-  const username = res.locals.user.display_name; // res.locals.userInfo.username
-  const userEmail = res.locals.user.email; // res.locals.userInfo.spotify_email
+
+  // if req.params.email is undefined, use res.locals.user.email
+  let userEmail;
+  if (req.params.email) {
+    userEmail = req.params.email;
+    res.locals.user = {};
+  } else {
+    userEmail = res.locals.user.email;
+  }
 
   const findFavsQuery = `SELECT cities.city_name AS city, countries.country_name AS country 
                         FROM countries_cities_users 
@@ -162,7 +163,9 @@ queryController.getFavs = (req, res, next) => {
   db.query(findFavsQuery, [userEmail])
     .then((response) => response)
     .then((data) => {
+      console.log('THIS IS DATA', data);
       res.locals.user.favsArray = data.rows;
+      console.log('AFTER RES LOCALS', res.locals.user.favsArray);
       return next();
     })
     .catch((err) => {

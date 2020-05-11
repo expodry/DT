@@ -11,29 +11,24 @@ import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 
-const fakeUser = {
-  name: 'Michael',
-  favorites: ['London', 'Baku', 'Paris', 'NYC', 'Moscow'],
-  //each fav is gonna be an object of country and city
-};
 function Home() {
   const [current, setCurrent] = useState({});
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [favorites, setFavorites] = useState([]);
+  const [query, setQuery] = useState('');
   useEffect(() => {
     fetch(`http://localhost:8080/api/user`)
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.display_name);
         setEmail(user.email);
-        console.log(user.favsArray);
-        // setFavorites(user.favorites);
+        setFavorites(user.favsArray);
       })
       .catch((err) => err);
   }, []);
-
   const grabLocationData = (location) => {
+    console.log(location);
     if (!location) return;
     let locationString = location
       .split(',')
@@ -52,28 +47,14 @@ function Home() {
     const city = values[1];
     const country = values[2];
     const email = values[0];
-    console.log(city, country, user);
-    // let method = 'POST';
-    // if (
-    //   favorites.includes(
-    //     JSON.stringify({
-    //       city,
-    //       country,
-    //       user,
-    //     }),
-    //   )
-    // ) {
-    //   method = 'DELETE';
-    // }
-
-    // fetch(`http://localhost:8080/api/toggleFav`, {
-    //   body: { city, country, user },
-    //   method,
-    // })
-    //   .then((data) => data.json())
-    //   .then((updatedFavs) => {
-    //     setFavorites(updatedFavs);
-    //   });
+    let method = 'POST';
+    fetch(`http://localhost:8080/api/toggleFav/${city}&${country}&${email}`, {
+      method: 'POST',
+    })
+      .then((data) => data.json())
+      .then((updatedFavs) => {
+        setFavorites(updatedFavs);
+      });
   };
 
   if (!Object.keys(current).length)

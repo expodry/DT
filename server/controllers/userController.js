@@ -70,9 +70,7 @@ userController.getUserData = (req, res, next) => {
     method: 'get',
     headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
   })
-    .then((resp) => {
-      return resp.json();
-    })
+    .then((resp) => resp.json())
     .then((data) => {
       console.log(data);
       if (data.error) {
