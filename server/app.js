@@ -5,7 +5,6 @@ const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
 
-
 const app = express();
 const port = 3000;
 
@@ -13,29 +12,32 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/verify',
-  userController.authenticate,
-  (req, res) => {
-    res.status(200).redirect('/authorize');
-  });
+app.get('/verify', userController.authenticate, (req, res) => {
+  res.status(200).redirect('/authorize');
+});
 
-app.get('/authorize',
+app.get(
+  '/authorize',
   userController.authorize,
   cookieController.setCookie,
   (req, res) => res.redirect('/home'));
 
 
-app.get('/home',
-  (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
+app.get('/home', (req, res) =>
+  res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+);
 
-app.get('/api/:city&:country',
+app.get(
+  '/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
-  (req, res) => res.status(200).send(res.locals.data));
+  apiController.getSpotifyData,
+  (req, res) => res.status(200).send(res.locals.data),
+);
 
-app.get('/api/user',
-  userController.getUserData,
-  (req, res) => res.status(200).send(res.locals.user));
+app.get('/api/user', userController.getUserData, (req, res) =>
+  res.status(200).send(res.locals.user),
+);
 
 app.use(
   '/',
@@ -54,10 +56,10 @@ app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 400,
-    message: { err: 'An error occurred' },
+    message: { error: 'An error occurred' },
   };
   const errObj = { ...defaultErr, ...err };
-  res.status(errObj.status).send(errObj.message.err);
+  res.status(errObj.status).send(errObj);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

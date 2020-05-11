@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap');
+body {
+  font-family: 'Rubik', sans-serif;
+  background-image: url(http://4dadventurehotsprings.com/wp-content/uploads/2016/06/Dark-Grey-Pattern-Background.jpg);
+  /* background-image: url(https://files.123freevectors.com/wp-content/original/104312-yellow-stripes-pattern.jpg); */
+}
 #main {
   display: flex;
   justify-content: space-between;
@@ -18,21 +24,52 @@
   align-items: center;
 }
 .cityCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 50px;
+  text-align: center;
   margin: 5px;
   border: solid 1px grey;
-  border-radius: 2px;
+  border-radius: 10px;
   box-shadow: 1px 1px 10px grey;
   height: 100px;
   width: 75%;
+  background-color: rgb(66, 65, 52);
+  opacity: 75%;
 }
 #weather {
-  margin: 5px;
-  /* background-color: aqua; */
+  opacity: 75%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 10px;
+  margin: 15px;
   border: solid 1px grey;
-  border-radius: 2px;
   box-shadow: 1px 1px 10px grey;
   height: 100px;
   width: 75%;
+  padding: 10px;
+}
+#window {
+  padding: 10px;
+  opacity: 75%;
+  margin: 15px;
+  border: solid 1px grey;
+  border-radius: 10px;
+
+  box-shadow: 1px 1px 10px grey;
+  background-color: rgb(66, 65, 52);
+}
+.weather-text {
+  color: white;
+  font-size: 20px;
+  font-family: 'Rubik', sans-serif;
+}
+#weather-texts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 #spotify {
   margin: 5px;
@@ -54,8 +91,7 @@
 #searchBar {
   width: 100%;
 }
-input {
-  border-radius: 2px;
-  border: solid 1px grey;
-  width: 100%;
+form {
+  display: flex;
+  flex-direction: column;
 }
