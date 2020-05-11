@@ -1,6 +1,6 @@
 const db = require('../models/dbModels');
 
-const queryController = { };
+const queryController = {};
 
 // Add user to database
 queryController.createOrFindUser = (req, res, next) => {
@@ -10,7 +10,8 @@ queryController.createOrFindUser = (req, res, next) => {
   const spotifyEmail = res.locals.user.email;
   const reqParams = [spotifyEmail, username];
 
-  const findQuery = 'SELECT id, spotify_email, username FROM users WHERE spotify_email = $1';
+  const findQuery =
+    'SELECT id, spotify_email, username FROM users WHERE spotify_email = $1';
   const createQuery = `INSERT INTO users (spotify_email, username)
                         VALUES ($1, $2)`;
 
@@ -25,10 +26,11 @@ queryController.createOrFindUser = (req, res, next) => {
             console.log(res.locals.userInfo);
             return next();
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             return next({
-              log: 'Error occurred in queryController.createOrFindUser - creating user',
+              log:
+                'Error occurred in queryController.createOrFindUser - creating user',
               message: { err: `The following error occurred: ${err}` },
             });
           });
@@ -37,10 +39,12 @@ queryController.createOrFindUser = (req, res, next) => {
         console.log(res.locals.userInfo);
         return next();
       }
-    }).catch((err) => {
+    })
+    .catch((err) => {
       console.log(err);
       return next({
-        log: 'Error occurred in queryController.createOrFindUser - finding user',
+        log:
+          'Error occurred in queryController.createOrFindUser - finding user',
         message: { err: `The following error occurred: ${err}` },
       });
     });
@@ -48,13 +52,10 @@ queryController.createOrFindUser = (req, res, next) => {
 
 // Add a new favourite city to database
 queryController.addFav = (req, res, next) => {
-  // add a favourite city (+ country) to database
-  // const username = 'koalaparty'; // res.locals.username
-  const userEmail = 'koalaparty@gmail.com'; // get from params
-  const city = 'Melbourne'; // res.locals.city;
-  const country = 'Australia'; // res.locals.country / or from req.params/body
+  const userEmail = req.params.email;
+  const city = req.params.city;
+  const country = req.params.country;
   const reqParams = [userEmail, city, country];
-
   // if city not in cities table, add to cities table
   const checkCityQuery = 'SELECT id FROM cities WHERE city_name = $1';
   const addCityQuery = `INSERT INTO cities (city_name, country_id)
@@ -72,14 +73,12 @@ queryController.addFav = (req, res, next) => {
                           )`;
 
   db.query(checkCityQuery, [city])
-    .then(response => response)
-    .then(data => {
-      console.log(data);
+    .then((response) => response)
+    .then((data) => {
       if (data.rowCount === 0) {
         db.query(addCityQuery, [city, country])
           .then((response) => response)
           .then((data) => {
-            console.log(data);
             return data;
           });
       } else {
@@ -92,26 +91,25 @@ queryController.addFav = (req, res, next) => {
         .then((response) => response)
         .then((data) => next())
         .catch((err) => {
-          console.log(err);
           return next({
             log: 'Error occurred in queryController.addFav',
             message: { err: `The following error occurred: ${err}` },
           });
         });
     })
-    .catch(err => {
-      console.log(err);
+    .catch((err) => {
       return next({
-        log: 'Error occurred in queryController.addFav when trying to create a new city',
+        log:
+          'Error occurred in queryController.addFav when trying to create a new city',
         message: { err: `The following error occurred: ${err}` },
       });
     });
 };
 
-// delete a favourite from database 
+// delete a favourite from database
 queryController.deleteFav = (req, res, next) => {
   // add a favourite city (+ country) to database
-  const username = 'koalaparty'; // res.locals.username 
+  const username = 'koalaparty'; // res.locals.username
   const userEmail = 'koalaparty@gmail.com'; // get from params
   const city = 'Columbus'; // req.body.city;
   const country = 'USA'; // req.body.country
@@ -143,10 +141,17 @@ queryController.deleteFav = (req, res, next) => {
 // get information about favourites from database (city and country)
 queryController.getFavs = (req, res, next) => {
   // retrieve fave countries and cities from db for individual user
-  // get all favourites from countries_cities_users table 
+  // get all favourites from countries_cities_users table
   // if no favourites, send user to next middleware and send empty array
-  const username = 'koalaparty'; // res.locals.userInfo.username
-  const userEmail = 'koalaparty@gmail.com'; // res.locals.userInfo.spotify_email
+
+  // if req.params.email is undefined, use res.locals.user.email
+  let userEmail;
+  if (req.params.email) {
+    userEmail = req.params.email;
+    res.locals.user = {};
+  } else {
+    userEmail = res.locals.user.email;
+  }
 
   const findFavsQuery = `SELECT cities.city_name AS city, countries.country_name AS country 
                         FROM countries_cities_users 
@@ -158,7 +163,9 @@ queryController.getFavs = (req, res, next) => {
   db.query(findFavsQuery, [userEmail])
     .then((response) => response)
     .then((data) => {
-      res.locals.favsArray = data.rows;
+      console.log('THIS IS DATA', data);
+      res.locals.user.favsArray = data.rows;
+      console.log('AFTER RES LOCALS', res.locals.user.favsArray);
       return next();
     })
     .catch((err) => {
@@ -168,6 +175,5 @@ queryController.getFavs = (req, res, next) => {
       });
     });
 };
-
 
 module.exports = queryController;

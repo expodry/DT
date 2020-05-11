@@ -5,7 +5,7 @@ import City from '../display/City';
 
 function Favorites(props) {
   // props.favorites(array of cities)   props.setCurrent(function to change current)
-  console.log('THIS IS FAVORITESSSS');
+  if (props.favorites.length === 0) return(<div id="favorites">You don't have any favorites yet</div>)
   const arrayOfCities = [];
   props.favorites.forEach((city, index) => {
     arrayOfCities.push(
