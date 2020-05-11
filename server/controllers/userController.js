@@ -16,7 +16,6 @@ userController.authorize = (req, res, next) => {
     code: req.query.code,
     redirect_uri,
   };
-  console.log(reqbody);
   // AFTER AUTH CODE HAS BEEN RECEIVED:
   // make a post request to https://accounts.spotify.com/api/token
   // body must contain following parameters encoded in application/x-www-form-urlencoded:
@@ -39,7 +38,6 @@ userController.authorize = (req, res, next) => {
         return next({ err: 'ERROR WITH AUTHORIZATION' });
       }
       res.locals.token = resp.body;
-      console.log('resp body', resp.body);
       return next();
     });
 };
