@@ -21,14 +21,13 @@ function Home() {
   const [username, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [favorites, setFavorites] = useState([]);
-  const [cityCountryUserQuery, setQuery] = useState('');
-
   useEffect(() => {
     fetch(`http://localhost:8080/api/user`)
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.display_name);
         setEmail(user.email);
+        console.log(user.favsArray);
         // setFavorites(user.favorites);
       })
       .catch((err) => err);
@@ -44,35 +43,37 @@ function Home() {
       .then((data) => data.json())
       .then((response) => {
         setCurrent(response);
+        setQuery(email + ', ' + response.userQuery);
       });
   };
 
   const toggleFav = (query) => {
     const values = query.split(',').map((elem) => elem.trim());
-    const city = values[0];
-    const country = values[1];
-    const user = values[2];
-    let method = 'POST';
-    if (
-      favorites.includes(
-        JSON.stringify({
-          city,
-          country,
-          user,
-        }),
-      )
-    ) {
-      method = 'DELETE';
-    }
+    const city = values[1];
+    const country = values[2];
+    const email = values[0];
+    console.log(city, country, user);
+    // let method = 'POST';
+    // if (
+    //   favorites.includes(
+    //     JSON.stringify({
+    //       city,
+    //       country,
+    //       user,
+    //     }),
+    //   )
+    // ) {
+    //   method = 'DELETE';
+    // }
 
-    fetch(`http://localhost:8080/api/toggleFav`, {
-      body: { city, country, user },
-      method,
-    })
-      .then((data) => data.json())
-      .then((updatedFavs) => {
-        setFavorites(updatedFavs);
-      });
+    // fetch(`http://localhost:8080/api/toggleFav`, {
+    //   body: { city, country, user },
+    //   method,
+    // })
+    //   .then((data) => data.json())
+    //   .then((updatedFavs) => {
+    //     setFavorites(updatedFavs);
+    //   });
   };
 
   if (!Object.keys(current).length)
@@ -95,7 +96,7 @@ function Home() {
   let FavIcon = (
     <span className="favIcon">
       <FAIcon
-        onClick={() => toggleFav(cityCountryUserQuery)}
+        onClick={() => toggleFav(query)}
         icon={solidStar}
         style={{ color: 'steelblue' }}
       />

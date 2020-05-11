@@ -4,7 +4,7 @@ const path = require('path');
 const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
-
+const queryController = require('./controllers/queryController');
 const app = express();
 const port = 3000;
 
@@ -20,13 +20,18 @@ app.get(
   '/authorize',
   userController.authorize,
   cookieController.setCookie,
-  (req, res) => res.redirect('/home'));
+  (req, res) => res.redirect('/home'),
+);
 
-
-app.get('/home',
+app.get(
+  '/home',
   cookieController.checkCookie,
   userController.getUserData,
-  (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
+  (req, res) =>
+    res
+      .status(200)
+      .sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+);
 
 app.get(
   '/api/:city&:country',
@@ -36,10 +41,12 @@ app.get(
   (req, res) => res.status(200).send(res.locals.data),
 );
 
-app.get('/api/user', 
-userController.getUserData,
- (req, res) =>
-  res.status(200).send(res.locals.user),
+app.get(
+  '/api/user',
+  userController.getUserData,
+  queryController.createOrFindUser,
+  queryController.getFavs,
+  (req, res) => res.status(200).send(res.locals.user),
 );
 
 app.use(

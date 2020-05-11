@@ -79,7 +79,10 @@ userController.getUserData = (req, res, next) => {
         console.log('invalid token');
         res.redirect('/');
       } else {
-        res.locals.user = { display_name: data.display_name, email: data.email };
+        res.locals.user = {
+          display_name: data.display_name,
+          email: data.email,
+        };
         return next();
       }
     })
