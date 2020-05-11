@@ -31,6 +31,7 @@ app.get('/home',
 app.get('/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
+  apiController.getSpotifyData,
   (req, res) => res.status(200).send(res.locals.data));
 
 app.use(
@@ -50,10 +51,10 @@ app.use((err, req, res, next) => {
   const defaultErr = {
     log: 'Express error handler caught unknown middleware error',
     status: 400,
-    message: { err: 'An error occurred' },
+    message: { error: 'An error occurred' },
   };
   const errObj = { ...defaultErr, ...err };
-  res.status(errObj.status).send(errObj.message.err);
+  res.status(errObj.status).send(errObj);
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

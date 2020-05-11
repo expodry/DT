@@ -3,7 +3,6 @@ const apiController = {};
 const fetch = require('node-fetch');
 
 apiController.getCountryData = (req, res, next) => {
-  console.log(req.params);
   const { country } = req.params;
   const url = `https://restcountries.eu/rest/v2/name/${country}`;
 
@@ -54,7 +53,7 @@ apiController.getWeatherData = (req, res, next) => {
   fetch(url)
     .then((response) => response.json())
     .then((data) => {
-
+      // format weather data from api
       const weatherData = {
         weather: data.weather[0].main,
         temp: data.main.temp,
@@ -65,15 +64,54 @@ apiController.getWeatherData = (req, res, next) => {
         windSpeed: data.wind.speed,
         sunrise: data.sys.sunrise,
         sunset: data.sys.sunset,
+        timezone: data.timezone,
       };
 
       res.locals.data.weatherData = weatherData;
-      console.log(res.locals);
       return next();
     })
     .catch((err) => {
-      console.log('this error');
-      next(`Error in getWeatheryData${err}`);
+      next(`Error in getWeatheryData: ${err}`);
+    });
+};
+
+apiController.getSpotifyData = (req, res, next) => {
+  // fetch featured playlist in specified country from spotify
+  const url = `https://api.spotify.com/v1/browse/categories/toplists/playlists?country=${res.locals.data.countryData.alpha2Code}`;
+  const accessToken = req.cookies.token.access_token;
+  const country = res.locals.data.countryData.name;
+
+  // use access token cookie
+  const options = {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    mode: 'no-cors',
+  };
+
+  fetch(url, options)
+    .then((response) => response.json())
+    .then((data) => {
+    //   console.log(data.playlists.items.find((playlist) => playlist.name === `${country} Top 50`));
+
+      // get tracks href of top 50 regional playlist
+      const tracksURL = data.playlists.items.find((playlist) => playlist.name === `${country} Top 50`).tracks.href;
+    //   console.log(tracksURL);
+
+      fetch(tracksURL, options)
+        .then((response) => response.json())
+        .then((tracks) => {
+          console.log(tracks.items.map((track) => (
+            {
+              name: track.track.name,
+              by: track.track.artists[0].name,
+            }
+          )));
+          return next();
+        })
+        .catch((err) => next(`Error in getSpotifyData: ${err}`));
+    })
+    .catch((err) => {
+      console.log('spotify error');
+      return next(`Error in getSpotifyData: ${err}`);
     });
 };
 
