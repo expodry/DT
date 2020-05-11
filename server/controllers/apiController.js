@@ -90,29 +90,27 @@ apiController.getSpotifyData = (req, res, next) => {
   fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
-    //   console.log(data.playlists.items.find((playlist) => playlist.name === `${country} Top 50`));
-
       // get tracks href of top 50 regional playlist
       const tracksURL = data.playlists.items.find((playlist) => playlist.name === `${country} Top 50`).tracks.href;
-    //   console.log(tracksURL);
 
+      // fetch track list of regional top 50
       fetch(tracksURL, options)
         .then((response) => response.json())
         .then((tracks) => {
-          console.log(tracks.items.map((track) => (
+          // format tracks
+          const trackList = tracks.items.map((track) => (
             {
               name: track.track.name,
               by: track.track.artists[0].name,
             }
-          )));
+          ));
+
+          res.locals.data.trackList = trackList;
           return next();
         })
         .catch((err) => next(`Error in getSpotifyData: ${err}`));
     })
-    .catch((err) => {
-      console.log('spotify error');
-      return next(`Error in getSpotifyData: ${err}`);
-    });
+    .catch((err) => next(`Error in getSpotifyData: ${err}`));
 };
 
 // apiController.getData = async (req, res, next) => {
