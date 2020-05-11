@@ -18,19 +18,18 @@ const fakeUser = {
 };
 function Home() {
   const [current, setCurrent] = useState({});
-  const [username, setUsername] = useState('');
+  const [username, setUserName] = useState('');
   const [favorites, setFavorites] = useState([]);
   const [cityCountryUserQuery, setQuery] = useState('');
 
   useEffect(() => {
-    // fetch(`http://localhost:8080/api/`)
-    //   .then((res) => res.json())
-    //   .then((user) => {
-    //     setUserName(user.name);
-    //     setFavorites(user.favorites);
-    //   });
-    setUsername(fakeUser.name);
-    setFavorites(fakeUser.favorites);
+    fetch(`http://localhost:8080/api/user`)
+      .then((res) => res.json())
+      .then((user) => {
+        setUserName(user.display_name);
+        // setFavorites(user.favorites);
+      })
+      .catch((err) => err);
   }, []);
 
   const grabLocationData = (location) => {
@@ -65,7 +64,7 @@ function Home() {
       method = 'DELETE';
     }
 
-    fetch(`http://localhost:3000/api/toggleFav`, {
+    fetch(`http://localhost:8080/api/toggleFav`, {
       body: { city, country, user },
       method,
     })
