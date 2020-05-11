@@ -63,6 +63,7 @@ apiController.getWeatherData = (req, res, next) => {
         windSpeed: data.wind.speed,
         sunrise: data.sys.sunrise,
         sunset: data.sys.sunset,
+        timezone: data.timezone,
       };
 
       res.locals.data.weatherData = weatherData;

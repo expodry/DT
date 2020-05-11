@@ -19,14 +19,8 @@ app.get('/authorize', userController.authorize, (req, res) =>
   res.redirect('/home'),
 );
 
-app.get(
-  '/home',
-  // userController.authorize,
-  // userController.getUserData,
-  (req, res) =>
-    res
-      .status(200)
-      .sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+app.get('/home', (req, res) =>
+  res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
 );
 
 app.get(
@@ -34,7 +28,6 @@ app.get(
   apiController.getCountryData,
   apiController.getWeatherData,
   (req, res) => {
-    console.log('ASDJASDHJASHJD', res.locals.data);
     res.status(200).send(res.locals.data);
   },
 );
