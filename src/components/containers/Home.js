@@ -4,86 +4,42 @@ import { useState, useEffect } from 'react';
 import Spotify from './Spotify';
 import Weather from './Weather';
 import Window from './Window';
+import Search from './Search';
+
 import Favorites from './Favorites';
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
 
-// maybe create add favorite function in home where it has access to username and
-// search string value and just pass that function down to the star?
-//or even keep it outside of the window.
-
-// const bigAssObject = {
-//   countryData: {
-//     name: 'Belgium',
-//     capital: 'Brussels',
-//     region: 'Europe',
-//     area: 30528,
-//     population: 11319511,
-//     languages: ['Dutch', 'French', 'German'],
-//     flag: 'https://restcountries.eu/data/bel.svg',
-//   },
-//   spotify: [
-//     'someSong1',
-//     'someSong2',
-//     'someSong3',
-//     'someSong4',
-//     'someSong5',
-//     'someSong6',
-//     'someSong7',
-//     'someSong8',
-//     'someSong9',
-//   ],
-//   weather: {
-//     temp: 60,
-//     weather: 'cloudy',
-//     wind: '25 km/h',
-//   },
-// };
-// const bigAssObject2 = {
-//   countryData: {
-//     name: 'Russia',
-//     capital: 'Moscow',
-//     region: 'Europe-Asia',
-//     area: 30528,
-//     population: 11319511,
-//     languages: ['Russian'],
-//     flag: 'https://restcountries.eu/data/rus.svg',
-//   },
-//   spotify: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-//   weather: {
-//     temperature: 80,
-//     sky: 'sunny',
-//     wind: '5 km/h',
-//   },
-// };
 const fakeUser = {
   name: 'Michael',
   favorites: ['London', 'Baku', 'Paris', 'NYC', 'Moscow'],
   //each fav is gonna be an object of country and city
 };
 function Home() {
-  const [location, setLocation] = useState('');
   const [current, setCurrent] = useState({});
   const [username, setUsername] = useState('');
   const [favorites, setFavorites] = useState([]);
   const [cityCountryUserQuery, setQuery] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:3000/api/`)
-      .then((res) => res.json())
-      .then((user) => {
-        setUserName(user.name);
-        setFavorites(user.favorites);
-      });
+    // fetch(`http://localhost:8080/api/`)
+    //   .then((res) => res.json())
+    //   .then((user) => {
+    //     setUserName(user.name);
+    //     setFavorites(user.favorites);
+    //   });
+    setUsername(fakeUser.name);
+    setFavorites(fakeUser.favorites);
   }, []);
 
   const grabLocationData = (location) => {
+    if (!location) return;
     let locationString = location
       .split(',')
       .map((word) => word.trim())
       .join('&');
-    fetch(`http://localhost:3000/api/${locationString}`)
+    fetch(`http://localhost:8080/api/${locationString}`)
       .then((data) => data.json())
       .then((response) => {
         console.log(response);
@@ -118,30 +74,13 @@ function Home() {
         setFavorites(updatedFavs);
       });
   };
+
   if (!Object.keys(current).length)
     return (
       <div>
+        <Search grabLocationData={grabLocationData} />
         <div>Welcome, {username}!</div>
-        <label htmlFor="search">Search the destination!</label>
-        <input
-          value={location}
-          onChange={(e) => {
-            setLocation(e.target.value);
-          }}
-          name="search"
-          id="search"
-          type="text"
-        ></input>
-        <button
-          onClick={() => {
-            grabLocationData(location);
-            setQuery(`${location}, ${username}`);
-            setLocation('');
-          }}
-          id="search-button"
-        >
-          Let's go!
-        </button>
+
         <Favorites
           favorites={favorites}
           grabLocationData={grabLocationData}
@@ -166,28 +105,8 @@ function Home() {
         {/* <Spotify songs={current.spotify} /> */}
       </div>
       <div id="middleColumn">
-        <label htmlFor="search">Search the destination!</label>
-        <div id="searchBar">
-          <input
-            value={location}
-            onChange={(e) => {
-              setLocation(e.target.value);
-            }}
-            name="search"
-            id="search"
-            type="text"
-          ></input>
-          <button
-            onClick={() => {
-              grabLocationData(location);
-              setQuery(`${location}, ${username}`);
-              setLocation('');
-            }}
-            id="search-button"
-          >
-            Let's go!
-          </button>
-        </div>
+        <Search grabLocationData={grabLocationData} />
+
         {FavIcon}
 
         <Window setFavorites={setFavorites} country={current.countryData} />
