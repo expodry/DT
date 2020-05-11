@@ -23,9 +23,10 @@ app.get(
   (req, res) => res.redirect('/home'));
 
 
-app.get('/home', (req, res) =>
-  res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
-);
+app.get('/home',
+  cookieController.checkCookie,
+  userController.getUserData,
+  (req, res) => res.status(200).sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')));
 
 app.get(
   '/api/:city&:country',
@@ -35,7 +36,9 @@ app.get(
   (req, res) => res.status(200).send(res.locals.data),
 );
 
-app.get('/api/user', userController.getUserData, (req, res) =>
+app.get('/api/user', 
+userController.getUserData,
+ (req, res) =>
   res.status(200).send(res.locals.user),
 );
 

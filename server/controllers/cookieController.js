@@ -5,4 +5,13 @@ cookieController.setCookie = (req, res, next) => {
   return next();
 };
 
+cookieController.checkCookie = (req, res, next) => {
+  if (req.cookies.token) {
+  return next();
+} else {
+  console.log('no cookie');
+  res.redirect('/');
+}
+};
+
 module.exports = cookieController;
