@@ -22,6 +22,7 @@ app.get('/verify',
 app.get('/authorize',
   userController.authorize,
   cookieController.setCookie,
+  // userController.getUserData,
   (req, res) => res.redirect('/home'));
 
 
@@ -32,6 +33,10 @@ app.get('/api/:city&:country',
   apiController.getCountryData,
   apiController.getWeatherData,
   (req, res) => res.status(200).send(res.locals.data));
+
+app.get('/api/user',
+  userController.getUserData,
+  (req, res) => res.status(200).send(res.locals.user));
 
 app.use(
   '/',

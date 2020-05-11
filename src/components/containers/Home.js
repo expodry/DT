@@ -65,17 +65,18 @@ const fakeUser = {
 function Home() {
   const [location, setLocation] = useState('');
   const [current, setCurrent] = useState({});
-  const [username, setUsername] = useState('');
+  const [username, setUserName] = useState('');
   const [favorites, setFavorites] = useState([]);
   const [cityCountryUserQuery, setQuery] = useState('');
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/`)
+    fetch(`http://localhost:8080/api/user`)
       .then((res) => res.json())
       .then((user) => {
-        setUserName(user.name);
-        setFavorites(user.favorites);
-      });
+        setUserName(user.display_name);
+        // setFavorites(user.favorites);
+      })
+      .catch((err) => err);
   }, []);
 
   const grabLocationData = (location) => {
