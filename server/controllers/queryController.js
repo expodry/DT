@@ -60,7 +60,7 @@ queryController.addFav = (req, res, next) => {
   const addCityQuery = `INSERT INTO cities (city_name, country_id)
                           VALUES (
                               $1, 
-                              (SELECT id FROM countries WHERE country_name = $2)
+                              (SELECT id FROM countries WHERE country_name = $2 OR alternate_name = $2)
                           )`;
 
   // query to insert new favourite connected to user
@@ -68,7 +68,7 @@ queryController.addFav = (req, res, next) => {
                           VALUES (
                               (SELECT id FROM users WHERE spotify_email = $1),
                               (SELECT id FROM cities WHERE city_name = $2),
-                              (SELECT id FROM countries WHERE country_name = $3)
+                              (SELECT id FROM countries WHERE country_name = $3 OR alternate_name = $3)
                           )`;
 
   db.query(checkCityQuery, [city])
@@ -123,7 +123,8 @@ queryController.deleteFav = (req, res, next) => {
                       AND
                       city_id = (SELECT id FROM cities WHERE city_name = $2)
                       AND 
-                      country_id = (SELECT id FROM countries WHERE country_name = $3)`;
+                      country_id = (SELECT id FROM countries WHERE country_name = $3 
+                                                              OR alternate_name = $3)`;
 
   db.query(deleteQuery, reqParams)
     .then((response) => response)
