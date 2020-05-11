@@ -5,13 +5,15 @@ import Home from './Home';
 
 function App() {
   return (
-    <div>
+    <div id="app">
       <Switch>
         <Route exact path="/">
-          LOGIN PAGE
-          <div>
+          <center>LOGIN PAGE</center>
+          <div id="spotifyLogin">
             {' '}
-            <a href="/verify">LOGIN WITH SPOTIFY</a>
+            <center>
+              <a href="/verify">LOGIN WITH SPOTIFY</a>
+            </center>
           </div>
         </Route>
         <Route exact path="/home">
