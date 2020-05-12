@@ -108,13 +108,11 @@ apiController.getSpotifyData = (req, res, next) => {
     mode: 'no-cors',
   };
 
+  // get featured playlists from region
   fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
       // get tracks href of top 50 regional playlist
-
-      // list of featured playlists for testing:
-      // console.log(data.playlists.items.map((playlist) => playlist.name));
       const tracksURL = data.playlists.items.find(
         (playlist) => playlist.name === `${country} Top 50`,
       ).tracks.href;
