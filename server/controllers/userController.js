@@ -1,12 +1,14 @@
 const fetch = require('node-fetch');
 const superagent = require('superagent');
+// client_id and client_secret stored in server/secrets/secrets.js
 const { client_id, client_secret } = require('../secrets/secrets.js');
 
+// url that spotify will redirect to upon authentication
 const redirect_uri = 'http://localhost:8080/authorize';
-// const redirect_uri = 'http://localhost:3000/home';
 
 const userController = {};
 
+// posts a request to spotify to get an authorization token
 userController.authorize = (req, res, next) => {
   const reqbody = {
     client_id,
@@ -17,15 +19,15 @@ userController.authorize = (req, res, next) => {
   };
   // AFTER AUTH CODE HAS BEEN RECEIVED:
   // make a post request to https://accounts.spotify.com/api/token
-  // body must contain following parameters encoded in application/x-www-form-urlencoded:
-  // grant_type: "authorization_code"
-  // code: authorization code returned from initial request
-  // redirect_uri: redirect_uri supplied when requesting code
-  // header must contain parameter:
-  // Authorization: Basic *<base64 encoded client_id:client_secret>*
-  //* *alternatively you can send client id and secret as request parameters in the post body
-  // on success, spotify will send in request body:
-  // access_token, token_type, scope, expires_in, refresh_token
+  // body contains the following parameters encoded in application/x-www-form-urlencoded:
+    // client_id
+    // cient_secret
+    // grant_type: "authorization_code"
+    // code: authorization code returned from initial request
+    // redirect_uri: redirect_uri supplied when requesting code
+  // header should specify content type as 'application/x-www-form-urlencoded'
+  // on success, spotify's response body will contain the following properties:
+    // access_token, token_type, scope, expires_in, refresh_token
 
   superagent
     .post('https://accounts.spotify.com/api/token')
@@ -41,10 +43,12 @@ userController.authorize = (req, res, next) => {
     });
 };
 
+// redirects to spotify page prompting user to login
 userController.authenticate = (req, res, next) => {
-  // //define scopes
+  // //define access scopes
   const scopes = 'user-read-private user-read-email';
-  // redirect to spotify page presenting scope
+  // redirect url must contain client_id, scopes, redirect_uri
+  //* can also contain an optional 'state' parameter */
   res.redirect(
     `${
       'https://accounts.spotify.com/authorize'
@@ -54,28 +58,28 @@ userController.authenticate = (req, res, next) => {
       scopes ? `&scope=${encodeURIComponent(scopes)}` : ''
     }&redirect_uri=${encodeURIComponent(redirect_uri)}`,
   );
-  //* *add state */
-  // need client id, scopes, redirect uri, (preferrably) state
-  // user is asked to accept or deny and then is sent back to redirect uri
-  // if accepted, response query string contains authorization code and value of state
-  // if denied, query string contains error and value of state
+  // on spotify login page, user is asked to accept or deny terms of scope
+  // if accepted, response query string contains authorization code
+  // if denied, query string contains error
+  // *query string will also contain value of 'state' if one was provided in params
 };
 
+// fetches user's profile information from spotify api
+// requires spotify access token received in authorize middleware
 userController.getUserData = (req, res, next) => {
-  // AFTER ACCESS TOKEN HAS BEEN RECEIVED:
-  // make requests to spotify web api with access token
-  // receive datas
+  // request to spotify's api with access_token from token cookie in header
   fetch('https://api.spotify.com/v1/me', {
     method: 'get',
     headers: { Authorization: `Bearer ${req.cookies.token.access_token}` },
   })
     .then((resp) => resp.json())
     .then((data) => {
-      console.log(data);
+      // if spotify returned an error (i.e. token was invalid) redirect to login
       if (data.error) {
         console.log('invalid token');
         res.redirect('/');
       } else {
+        // save display name and email from response object
         res.locals.user = {
           display_name: data.display_name,
           email: data.email,
@@ -89,10 +93,12 @@ userController.getUserData = (req, res, next) => {
     });
 };
 
-// after tokens expire, new ones must be requested in exchage for refresh_token
+// REFRESHING TOKENS:
+// after tokens expire, new ones must be requested using the refresh_token property on token object
 // POST https://accounts.spotify.com/api/token
 // body must contain grant_type and refresh_token encoded in application/x-www-form-urlencoded
-// header must contain following parameter: 
+// header must contain following parameter:
 // Authorization: Basic <base64 encoded client_id:client_secret>
+  // * alternatively, the client id and secret could be sent in request body as in authorize
 
 module.exports = userController;

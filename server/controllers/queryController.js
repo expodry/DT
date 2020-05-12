@@ -57,10 +57,12 @@ queryController.createOrFindUser = (req, res, next) => {
 
 // Add a new favourite city to database
 queryController.addFav = (req, res, next) => {
-  const { userEmail } = req.params;
+  console.log(req.params);
+  const { email } = req.params;
   const { city } = req.params;
   const { country } = req.params;
-  const reqParams = [userEmail, city, country];
+  const reqParams = [email, city, country];
+  console.log(reqParams);
 
   // check cities table to see if any rows are returned with this city name
   const checkCityQuery = 'SELECT id FROM cities WHERE city_name = $1';
@@ -111,7 +113,7 @@ queryController.addFav = (req, res, next) => {
     .then(() => {
       // once we've checked for the city in the database, check if fav exists
       // if not, add as favourite for our user. If yes, return next();
-      db.query(checkForFav, [userEmail, city])
+      db.query(checkForFav, [email, city])
         .then((response) => response)
         .then((data) => {
           // if no rows returned from first query, add new favourite
@@ -150,10 +152,10 @@ queryController.addFav = (req, res, next) => {
 queryController.deleteFav = (req, res, next) => {
   // add a favourite city (+ country) to database
   // takes information from params sent from request
-  const { userEmail } = req.params;
+  const { email } = req.params;
   const { city } = req.params;
   const { country } = req.params;
-  const reqParams = [userEmail, city, country];
+  const reqParams = [email, city, country];
 
   const deleteQuery = `DELETE FROM countries_cities_users
                       WHERE 

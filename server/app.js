@@ -17,13 +17,13 @@ app.get('/verify', userController.authenticate, (req, res) => {
   res.status(200).redirect('/authorize');
 });
 
+// separate authorization route to prevent spotify code from being retained in 'home' url
 app.get(
   '/authorize',
   userController.authorize,
   cookieController.setCookie,
   (req, res) => res.redirect('/home'),
 );
-
 
 app.get(
   '/home',
