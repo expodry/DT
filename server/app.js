@@ -22,7 +22,7 @@ app.get(
   '/authorize',
   userController.authorize,
   cookieController.setCookie,
-  (req, res) => res.redirect('/home'),
+  (req, res) => res.redirect('/home')
 );
 
 app.get(
@@ -32,7 +32,7 @@ app.get(
   (req, res) =>
     res
       .status(200)
-      .sendFile(path.resolve(__dirname, '..', 'dist', 'index.html')),
+      .sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'))
 );
 
 app.get(
@@ -41,11 +41,12 @@ app.get(
   apiController.getCountryData,
   apiController.getWeatherData,
   apiController.getSpotifyData,
+  apiController.getComplexRecipes,
   (req, res, next) => {
     console.log(res.locals.data);
     return next();
   },
-  (req, res) => res.status(200).send(res.locals.data),
+  (req, res) => res.status(200).send(res.locals.data)
 );
 
 // app.get('/api/user',
@@ -58,7 +59,7 @@ app.post(
   queryController.getFavs,
   (req, res) => {
     res.status(200).send(res.locals.user.favsArray);
-  },
+  }
 );
 
 app.get(
@@ -66,14 +67,14 @@ app.get(
   userController.getUserData,
   queryController.createOrFindUser,
   queryController.getFavs,
-  (req, res) => res.status(200).send(res.locals.user),
+  (req, res) => res.status(200).send(res.locals.user)
 );
 
 app.use(
   '/',
   express.static('./dist', {
     index: 'index.html',
-  }),
+  })
 );
 
 // catch-all route handler for any requests to an unknown route
