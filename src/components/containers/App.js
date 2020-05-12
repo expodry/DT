@@ -1,9 +1,8 @@
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-import { useState } from 'react';
-import Home from './Home';
 import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify as Spotify } from '@fortawesome/fontawesome-free-brands';
+import Home from './Home';
 
 function App() {
   let FavIcon = (

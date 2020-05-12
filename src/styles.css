@@ -18,20 +18,6 @@ body {
   width: 33%;
 }
 
-/* #app {
-  color: white;
-  align-self: center;
-  display: flex;
-  flex-direction: column;
-  margin: 15px;
-  border: solid 1px grey;
-  box-shadow: 1px 1px 10px grey;
-  background-color: rgb(66, 65, 52);
-  opacity: 75%;
-  border-radius: 10px;
-  width: 95%;
-  padding: 10px;
-} */
 #searchForm {
   margin: 15px;
   border: solid 1px grey;
@@ -43,7 +29,6 @@ body {
   padding: 10px;
 }
 a {
-  /* text-decoration: none; */
   color: white;
 }
 input {
