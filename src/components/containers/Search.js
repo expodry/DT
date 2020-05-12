@@ -1,14 +1,14 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function Search(props) {
   const [value, setValue] = useState('');
   const handleSubmit = (e) => {
     e.preventDefault();
-    let bigAssObject = props.grabLocationData(value);
+    props.grabLocationData(value);
     setValue('');
-    return bigAssObject;
   };
   return (
     <form id="searchForm" onSubmit={handleSubmit}>

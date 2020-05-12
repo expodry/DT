@@ -1,5 +1,7 @@
 import React from 'react';
 
+//shouldve been in display folder, dont wanna move it at this point
+
 function Spotify(props) {
   if (!props.songs.length) {
     return (

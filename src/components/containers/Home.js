@@ -1,23 +1,34 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
+import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
+
 import Spotify from './Spotify';
 import Weather from './Weather';
 import Window from './Window';
 import Search from './Search';
 
 import Favorites from './Favorites';
-import { FontAwesomeIcon as FAIcon } from '@fortawesome/react-fontawesome';
-import { faStar as regStar } from '@fortawesome/free-regular-svg-icons';
-import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons';
 
 function Home() {
   const [current, setCurrent] = useState({});
+  //current is the bigAssObject we receive from "grabLocationData" that feeds most of the components with data
   const [username, setUserName] = useState('');
+  //for welcoming
   const [email, setEmail] = useState('');
+  //unique name to add favs to db
   const [favorites, setFavorites] = useState([]);
+  //array of favs we got on initial load
   const [query, setQuery] = useState('');
+  //save users search in case he wants to add it to favs(we only save his query, not actual country data
+  //since its different every time)
+
+  //initial load
   useEffect(() => {
-    fetch(`http://localhost:8080/api/user`)
+    fetch('http://localhost:8080/api/user')
       .then((res) => res.json())
       .then((user) => {
         setUserName(user.display_name);
@@ -26,8 +37,10 @@ function Home() {
       })
       .catch((err) => err);
   }, []);
+  //fires up on search submit and on click of fav city
   const grabLocationData = (location) => {
     if (!location) return;
+    //change the format of incoming string to add if as params
     const locationString = location
       .split(',')
       .map((word) => word.trim())
@@ -39,23 +52,28 @@ function Home() {
         setQuery(email + ', ' + response.userQuery);
       });
   };
-
-  const toggleFav = (query) => {
-    const values = query.split(',').map((elem) => elem.trim());
+  //toggle fav doesnt toggle, only adds fav, there is no way to remove it, sorry guys, we had no time:(
+  const toggleFav = (queryString) => {
+    //format the string for params
+    const values = queryString.split(',').map((elem) => elem.trim());
     const city = values[1];
     const country = values[2];
-    const email = values[0];
-    let method = 'POST';
-    fetch(`http://localhost:8080/api/toggleFav/${city}&${country}&${email}`, {
-      method: 'POST',
-    })
+    const userEmail = values[0];
+    fetch(
+      `http://localhost:8080/api/toggleFav/${city}&${country}&${userEmail}`,
+      {
+        method: 'POST',
+      },
+    )
       .then((data) => data.json())
       .then((updatedFavs) => {
         setFavorites(updatedFavs);
+        //receive new array of favs and change the state
       });
   };
 
-  if (!Object.keys(current).length)
+  if (!Object.keys(current).length) {
+    //there is no current - render only these..
     return (
       <div>
         <div id="leftColumn">
@@ -72,8 +90,8 @@ function Home() {
         </div>
       </div>
     );
-
-  let FavIcon = (
+  }
+  const FavIcon = (
     <span className="favIcon">
       <FAIcon
         onClick={() => {
@@ -91,8 +109,12 @@ function Home() {
       <div id="leftColumn">
         <div className="welcoming">
           {' '}
-          <br></br>Welcome, {username}!<br></br>
-          <br></br>{' '}
+          <br />
+          Welcome,
+          {username}
+          !
+          <br />
+          <br />{' '}
         </div>
         <Weather weather={current.weatherData} />
         <Spotify songs={current.trackList} />
@@ -102,7 +124,7 @@ function Home() {
 
         <div id="favIcon">{FavIcon}</div>
 
-        <Window setFavorites={setFavorites} country={current.countryData} />
+        <Window country={current.countryData} />
       </div>
       <div id="rightColumn">
         <Favorites
