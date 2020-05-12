@@ -17,6 +17,7 @@ app.get('/verify', userController.authenticate, (req, res) => {
   res.status(200).redirect('/authorize');
 });
 
+// separate authorization route to prevent spotify code from being retained in 'home' url
 app.get(
   '/authorize',
   userController.authorize,
@@ -46,6 +47,10 @@ app.get(
   },
   (req, res) => res.status(200).send(res.locals.data),
 );
+
+// app.get('/api/user',
+//   userController.getUserData,
+//   (req, res) => res.status(200).send(res.locals.user));
 
 app.post(
   '/api/toggleFav/:city&:country&:email',
