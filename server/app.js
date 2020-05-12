@@ -5,6 +5,7 @@ const apiController = require('./controllers/apiController');
 const userController = require('./controllers/userController');
 const cookieController = require('./controllers/cookieController');
 const queryController = require('./controllers/queryController');
+
 const app = express();
 const port = 3000;
 
@@ -87,7 +88,7 @@ app.use((err, req, res, next) => {
     status: 400,
     message: { error: 'An error occurred' },
   };
-  const errObj = { ...defaultErr, ...err };
+  const errObj = { ...defaultErr, err };
   res.status(errObj.status).send(errObj);
 });
 
