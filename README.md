@@ -1,2 +1,2 @@
 # DT
-Digital travel (far)
+Digital travel
