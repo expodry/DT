@@ -1,2 +1,2 @@
-# DT
-Digital travel
+# Digital Travel
+Virtual travel application
